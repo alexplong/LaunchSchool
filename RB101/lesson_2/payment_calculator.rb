@@ -15,16 +15,15 @@ def integer?(number)
 end
 
 def float?(number)
-  number.to_f.to_s == number && number.to_f > 0 
+  number.to_f.to_s == number && number.to_f > 0
 end
-  
+
 def number?(number)
   integer?(number) || float?(number)
 end
 
 prompt("Welcome To Your Payment Calculator")
 prompt("")
-prompt("Please have your loan amount in $, annual percentage rate (APR) in %, and your loan years ready")
 prompt("----------------------------------------------------------------")
 
 principle_amount = ''
@@ -55,9 +54,8 @@ loan_months = loan_years.to_f * 12
 
 prompt("----------------------------------------------------------------")
 prompt("Calculate your loan amount ................")
-monthly_payment = principle_amount.to_f * 
-                  (monthly_interest_rate / 
-                  (1 - (1 + monthly_interest_rate)**(-loan_months)))
+monthly_payment = principle_amount.to_f *
+                  (monthly_interest_rate /
+                  (1 - ((1 + monthly_interest_rate)**(-loan_months))))
 
 prompt("Your monthly payment amount is #{monthly_payment}")
-
