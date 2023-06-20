@@ -31,19 +31,23 @@ def display_results(player, computer)
   end
 end
 
-def update_score(player)
-  player += 1
-  puts player
+def update_score(choice, computer_choice, score)
+  if win?(choice, computer_choice)
+      score[:player] += 1
+    elsif win?(computer_choice, choice)
+      score[:computer] += 1
+    end
 end
 
 player_score = 0
 computer_score = 0
 
+score = {player: 0, computer: 0}
+
 loop do
   choice = ''
 
-  prompt("Current Score: Player: #{player_score} Computer: #{computer_score}")
-
+  prompt("Current Score: Player: #{score[:player]} Computer: #{score[:computer]}")
 
   loop do
     prompt("Choose one: #{VALID_CHOICES.join(', ')}")
@@ -56,8 +60,17 @@ loop do
   Kernel.puts("You chose: #{VALID_CHOICES[SHORTENED_CHOICES.index(choice)]}, computer chose: #{computer_choice}")
 
   display_results(choice, computer_choice)
-  update_score(player_score)
 
+  update_score(choice, computer_choice, score)
+
+  if score[:player] == 3
+    prompt("You win Player")
+    break
+  elsif score[:computer] == 3
+    prompt("Computer kicked yer butt")
+    break
+  end
+   
   prompt("Play again? ")
   answer = Kernel.gets().chomp()
   break unless answer.downcase().start_with?('y')
