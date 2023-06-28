@@ -233,6 +233,13 @@ hitchhiker ? puts(42) : puts(3.1415)      # bad - printing
 (4 == 4) || (5 == 5)  # => true   // only one side needs to evaluate to true to return true
 (4 == 5) || (5 == 5)  # => true   // left side evaluates to false so right side of || checked and returns true
 (4 == 4) || (4 == 7)  # => true   // right side is not evaluated at all due to short-circuit as left true returns true
+# important use with non bools    // the && and || operators also work with 'truthy' and 'falsey' values too
+3 || 'foo'            # => 3      // the return value is ALWAYS the value of the operand evaluated last, since 3 'truthy' and last evaluated > return 3
+'foo' || 3            # => "foo"  // "foo" is truthy > return "foo"
+nil || 'foo'          # => "foo"
+nil && 'foo'          # => nil    // since && operator and short-circuiting - nil is last operand to be evaluated
+3 && 'foo'            # => "foo"  // && operator - "foo" last evaluated
+'foo' && 3            # => 3
 
 
 ################################################################
@@ -390,4 +397,48 @@ a = 'not here'      # a is reassigned to point to new String object
                     # => a outputs "not here", # => b outputs "hi there"
                     # some operations mutate the address space (<< operator, []= operator, destructive/mutating methods including ! and others)
                     # other operations (=, +=, -=, *=, etc) and non-destructive/non-mutating methods make variable point to a different address
-                    
+
+
+################################################################
+# conditionals ### - conditionals is a fork (or many forks) in the road - data approaches a conditional and the conditional
+# directs data where to go based on defined parameters
+# formed using a combination of if statements and comparison and logical operators (<, >, <=, >=, ==, !=, &&, ||)
+# they are basic logical structures that are defined with the reserved words if, else, elsif, and end
+a = 2
+if a == 2
+  puts 'a is 2'
+elsif a == 4
+  puts 'a is 4'
+else
+  puts 'a is neither 2 or 4'
+end
+is_this_true = true
+foo = is_this_true ? "yes it is" : "no it is not"       # ternary operator makes quick if/else statements on one line
+puts foo                                                # keep in mind to only use ternary to select between two values and not choose between two actions
+is_this_true ? puts("yes it is") : puts("no it is not") # bad use example
+# case statement - similar functionality to an if statement but with slightly different interface
+a = 4
+case a                                                  # can also be stored into a variable, line can be rewritten as: answer = case a
+when 2                                                  # structure very similar to if/else statement
+  puts "a is 2"
+when 4
+  puts "a is 4"
+else
+  puts "a is neither 2 or 4"
+end                                                     # => "a is 4"   // if rewritten, can remove puts from body and add puts answer to end 
+# comparisons using equal to (==) operator, not equal to (!=) operator, and the <, >, <=, >= operators always returns a boolean
+4 == 5                                                  # => false
+(4 == 4) && (5 == 5)                                    # => true // can be combined to create more specific scenarios using && and || operators 
+                                                        # when operating on booleans, && and || will return true or false but not always the case
+                                                        # see short-circuiting above for more
+(4 == 5) || (5 == 5)                                    # => true // don't forget about short-circuiting and precedence when it comes to evaluation order
+# order of precedence is followed by Ruby when deciding how to evaluate multiple expressions
+# highest order of precedence (top) to lowest (bottom)
+# <=, <, >, >=      # => Comparison
+# ==, !=            # => Equality
+# &&                # => Logical AND
+# ||                # => Logical OR
+
+
+################################################################
+# loops and iterators ### - 
