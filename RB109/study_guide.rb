@@ -269,3 +269,75 @@ p (array.map do |num|                 # wrapping the whole thing in parenthesis 
   num + 1
 end)
 
+
+################################################################
+# type conversion ### 
+nil.to_i                          # => 0
+'12'.to_i                         # => 12
+'4 hi there'.to_i                 # => 4  appended strings don't affect number at beginning
+'hi there 4'.to_i                 # => 0  strings prepending number leads to 0
+nil.to_f                          # => 0.0  
+'4'.to_f                          # => 4.0
+'4 hi there'.to_f                 # => 4.0  similar things happening with float
+'hi there 4'.to_f                 # => 0.0
+nil.to_s                          # => "" empty to string is empty string
+false.to_s                        # => "false"
+{name: "Alex", age: 37}.to_s      # => "{:name=>\"Alex\", :age=>37}"
+{name: "Alex", age: 37}.to_a      # => [[:name, "Alex"], [:age, 37]]
+[["Alex", 37], ["Umi", 35]].to_h  # => {"Alex"=>37, "Umi"=>35}
+
+
+################################################################
+# mutability, immutability, and constants ### 
+# Integers and Floats are immutable - instead of mutating original object, a new Float is created and is bound to the new object
+x = 1                       #
+x.object_id                 # => 3
+x += 1                      #
+x.object_id                 # => 5
+# strings, arrays, hashes are mutable
+mutable = 'it me'           # variable is pointer to the String object
+was_it_mutated = mutable    # create reference to same pointer
+mutable << ', see!'         # => "it me, see!" 
+puts was_it_mutated         # => "it me, see!"  // object_id's match
+array_mutable = [1, 2, 3]   # variable is pointer to Array object, with each element pointing to
+array_mutable.object_id     # an immutable Integer object
+array_mutable[0].object_id
+array_mutable[1].object_id
+array_mutable[2].object_id
+array_mutable.push(4)       # original object_id still 
+                            # mutability similar with hash
+arr_string = ['alex', 'umi']  # example with strings and follows up with section below
+arr_string[0].object_id       # object_id of position 0 pointer to String object
+arr_string[0] = 'umishiba'    # array []= assignment leads to mutation of String object, 
+                              # still points to same object_id
+# reassignment does not mean mutation of variable
+x = 'hello'       
+x += ' there'         # => "hello there"           // object_id shows new String object created and is now bound to x
+x = x + '!!!'         # => "hello there!!!"        // again object_id shows new String object made and bound to x
+x = 'hello there!!!'  # => "hello there!!!"        // new String object with same value bound to x
+# as opposed to shovel operator << that does mutate
+x << ' smelllo'       # => "hello there!!! smello" // now the operator has mutated the caller
+
+# constants - declared with all caps. Ruby allows mutation of constants but you should NOT
+MAMBA = 824                 # have lexical scope, behave like globals 
+def from_methods            # can be accessed within blocks ex not shown cause all vars do that
+  puts "printing #{MAMBA}"  # can be accessed via methods without having to pass them in
+end
+loop do
+  MY_TEAM = "The Lakers"    # declaration in inner scope also leaves it accessible in outer scope
+  break
+end
+puts MY_TEAM
+
+
+################################################################
+# variables ###
+# local variables and constant names
+i_am_a_variable = "Alex"      # snake case for local variables, methods, or file
+NEW_CONSTANT = "new constant" # capitalize constant variables
+class MyFirstClass            # pascal case for classes
+                              # scope is determined by where the variable is initialized or created
+                              # with respect to inner and outer scope for accessibility
+i_am_a_variable = "Plong"     # reassignment points the variable to a new String object rather than mutate the original object
+
+# variable scope and method definitions
