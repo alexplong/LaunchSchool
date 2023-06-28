@@ -290,54 +290,104 @@ false.to_s                        # => "false"
 ################################################################
 # mutability, immutability, and constants ### 
 # Integers and Floats are immutable - instead of mutating original object, a new Float is created and is bound to the new object
-x = 1                       #
-x.object_id                 # => 3
-x += 1                      #
-x.object_id                 # => 5
-# strings, arrays, hashes are mutable
-mutable = 'it me'           # variable is pointer to the String object
-was_it_mutated = mutable    # create reference to same pointer
-mutable << ', see!'         # => "it me, see!" 
-puts was_it_mutated         # => "it me, see!"  // object_id's match
-array_mutable = [1, 2, 3]   # variable is pointer to Array object, with each element pointing to
-array_mutable.object_id     # an immutable Integer object
+x = 1                         # 
+x.object_id                   # => 3
+x += 1                        #
+x.object_id                   # => 5
+                          # strings, arrays, hashes are mutable
+mutable = 'it me'             # variable is pointer to the String object
+was_it_mutated = mutable      # create reference to same pointer
+mutable << ', see!'           # => "it me, see!" 
+puts was_it_mutated           # => "it me, see!"  // object_id's match
+array_mutable = [1, 2, 3]     # variable is pointer to Array object, with each element pointing to
+array_mutable.object_id       # an immutable Integer object
 array_mutable[0].object_id
 array_mutable[1].object_id
 array_mutable[2].object_id
-array_mutable.push(4)       # original object_id still 
-                            # mutability similar with hash
+array_mutable.push(4)         # original object_id still 
+                          # mutability similar with hash
 arr_string = ['alex', 'umi']  # example with strings and follows up with section below
 arr_string[0].object_id       # object_id of position 0 pointer to String object
 arr_string[0] = 'umishiba'    # array []= assignment leads to mutation of String object, 
-                              # still points to same object_id
-# reassignment does not mean mutation of variable
-x = 'hello'       
-x += ' there'         # => "hello there"           // object_id shows new String object created and is now bound to x
-x = x + '!!!'         # => "hello there!!!"        // again object_id shows new String object made and bound to x
-x = 'hello there!!!'  # => "hello there!!!"        // new String object with same value bound to x
-# as opposed to shovel operator << that does mutate
-x << ' smelllo'       # => "hello there!!! smello" // now the operator has mutated the caller
-
-# constants - declared with all caps. Ruby allows mutation of constants but you should NOT
-MAMBA = 824                 # have lexical scope, behave like globals 
-def from_methods            # can be accessed within blocks ex not shown cause all vars do that
-  puts "printing #{MAMBA}"  # can be accessed via methods without having to pass them in
+                          # still points to same object_id
+x = 'hello'                   # reassignment does not mean mutation of variable
+x += ' there'                 # => "hello there"           // object_id shows new String object created and is now bound to x
+x = x + '!!!'                 # => "hello there!!!"        // again object_id shows new String object made and bound to x
+x = 'hello there!!!'          # => "hello there!!!"        // new String object with same value bound to x
+                              # as opposed to shovel operator << that does mutate
+x << ' smelllo'               # => "hello there!!! smello" // now the operator has mutated the caller
+                              # constants - declared with all caps. Ruby allows mutation of constants but you should NOT
+MAMBA = 824                   # have lexical scope, behave like globals 
+def from_methods              # can be accessed within blocks ex not shown cause all vars do that
+  puts "printing #{MAMBA}"    # can be accessed via methods without having to pass them in
 end
 loop do
-  MY_TEAM = "The Lakers"    # declaration in inner scope also leaves it accessible in outer scope
+  MY_TEAM = "The Lakers"      # declaration in inner scope also leaves it accessible in outer scope
   break
 end
 puts MY_TEAM
 
 
 ################################################################
-# variables ###
-# local variables and constant names
+# variables ### - local variables, constant names, initialization of variables, and reassignment
 i_am_a_variable = "Alex"      # snake case for local variables, methods, or file
 NEW_CONSTANT = "new constant" # capitalize constant variables
 class MyFirstClass            # pascal case for classes
-                              # scope is determined by where the variable is initialized or created
+                              # initialization of variable - where it's created detetrmines scope 
                               # with respect to inner and outer scope for accessibility
+                              # assignment of variable performed using assignment operator =, reassignment also performed with = operator
 i_am_a_variable = "Plong"     # reassignment points the variable to a new String object rather than mutate the original object
 
-# variable scope and method definitions
+################################################################
+# variable scope and method definitions ### 
+# a variable's scope is determined by where the variable is initialized or created
+# in Ruby, variable scope is defined by a method definition or a block
+name = 'Somebody else'                      # lets look at variable scope and method definitons 
+def print_full_name(first_name, last_name)  # methods have self-contained scope & only variables initialized within method body can be referenced or modified by the method
+  name = first_name + ' ' + last_name       # variable's intialized inside a method's body aren't available outside of it and same vice-versa, method has no access to outside scoped variables
+  puts name                                 # another name variable is created that is locally scoped to the method
+end                                         # thus, the method is unable to mutate the outside scoped name variable inside the print_full_name method
+print_full_name 'Alex', 'Plong'             # => "Alex Plong"
+puts name                                   # => "Somebody Else"
+
+
+################################################################
+# variable scope and blocks ### - blocks are code that follow method invocation 
+# Ruby creates a new scope for local variables and block behavior is identical for blocks with one-line { } as well as multi-line do...end
+total = 0                                   # total is outer scoped and is accessible in { } block invoked by each method
+[1, 2, 3].each { |n| total += n}            # outer scope can be accessed by inner scope but not vice versa
+puts total                                  # => 6  // outer scoped variable altered inside the { } code block
+                                            # the example show Ruby blocks creates a new scope for local variables (the inner scope)
+# not all do...end keyword/syntax imply a block that alters scoping!
+# for and while loops are NOT blocks
+arr = [1, 2, 3]
+for i in arr do   # NOT a block
+  a = 5           # NOT a different scoped variable
+end
+puts a            # => 5 // a is accessible
+                  # if all else, if { } or do...end does not immediately follow a method invocation, it's NOT a block
+
+                                            
+################################################################
+# variable shadowing ### - inner scope can access outer scope in blocks but ...
+# if the block local variable (or block parameter) shares same name as outside scoped variable
+# variable shadowing functions to prevent access to the outer scoped variable when the naming scheme previously mentioned occurs
+# if you refer to the outside scope variable without it having the same variable name as the block parameter
+# you'll access the outside scope variable, as you should since blocks allow acc
+x = 10
+5.times do |x|  # // block parameter shares same name as outside scoped variable
+  puts x        # => 0, # => 1, # => 2, # => 3, # => 4 
+end             # // despite blocks having access to outside scope variables, variable shadowing prevented access since block parameter name is the same
+puts x          # => 10
+
+
+################################################################
+# variables as pointers ### - Ruby variables act as pointers to an address space in memory
+# variable does not actually contain the value but instead contains a pointer to specific area in memory that contains the value
+a = 'hi there'      # a contains pointer to String object
+b = a               # b now contains pointer to same address
+a = 'not here'      # a is reassigned to point to new String object
+                    # => a outputs "not here", # => b outputs "hi there"
+                    # some operations mutate the address space (<< operator, []= operator, destructive/mutating methods including ! and others)
+                    # other operations (=, +=, -=, *=, etc) and non-destructive/non-mutating methods make variable point to a different address
+                    
