@@ -447,4 +447,117 @@ end                                                     # => "a is 4"   // if re
 
 
 ################################################################
-# loops and iterators ### - 
+# loops and iterators ### - a loop is the repetitive execution of code for a given amount of repititions or until a certain condition is met
+# loop method
+loop do                   # simplest loop to create in Ruby is with the loop method
+  puts "I'm looping"      # this loop executes any code within the block ({ } or do...end) and continues to execute until
+#  break                  # you can manually stop the loop with Ctrl + c or insert a break statement inside the block to exit the loop
+end                       # otherwise without the break, it will loop forever
+
+# loop with break keyword
+i = 0                     # can also use conditionals to break out of loop
+loop do                   # here we are implementing break into the loop
+  i = i + 1               # code blocks following loop method invocation introduces new scope and inner scope can access outside scope but not vice versa
+  puts i                  
+  if i == 10              # break out of the loop when i == 10          
+    break
+  end
+end
+
+# loop with next keyword
+j = 0                     # next is used to skip the rest of the current iteration and start the next iteration
+loop do
+  j = j + 1
+  if j % 2 != 0
+    next                  # skip over the rest of this iteration
+  end
+  puts j
+  if j == 10
+    break                 # break out of loop after condition is met
+  end
+end
+
+# while loops - given a parameter that evaluates as a boolean: true or false
+x = 0
+while x < 10              # while true >> when expression becomes to false => loop is not executed again => program continues after while loop
+  puts x                  # while is NOT a method, I repeat, while is NOT a method
+  x += 1                  # no method invocation, means no code block => which means NEW SCOPE NOT CREATED
+  b = "see not a scope"   # => not in an inner scope
+end                       # therefore, the entire body of the loop is in the same scope as the code that contains the while loop
+puts "while loop done"
+puts b                    # => "see not a scope"
+
+# until loops - this loop is simply the opposite of the while loop
+x = 10                    # until can be substituted for keyword while in order to phrase the problem in a different way
+until x < 0               # while statement is false, continue loop UNTIL true
+  puts x                  #   similar to while loops, until is not a method => therefore no new scope created
+  x -= 1                  #
+end                       #
+puts "until loop done"    #
+
+# do/while loops - works similar to while loop with one important difference => code within gets executed one time prior to conditional check
+                          # in do/while loops, the conditional check is at the end of the loop as opposed to the beginning
+loop do                   # do/while loops in Ruby doesn't use while keyword, just incorporates do and break to function like so
+  puts "want to do that again?"
+  answer = gets.chomp
+  abc = 'yo'              # the do/whle loop uses the loop method => method invocation with do...end code block => new scope created here
+  if answer != "Y"        # conditional at the end of the do/while loop
+    break
+  end
+end
+
+# for loops - used to loop over a collection of elements, has a definite end to loop unlike while loops (infinite)
+x = 10
+for i in 1..x do          # using ranges: 1..10 => 1 thru 10 inclusive  // 1...10 => 1 up to 10 but not 10
+  puts x - i
+end
+puts "done"
+
+x = [1, 2, 3, 4, 5]       # using arrays
+for i in x.reverse do     # new scope NOT CREATED in for loop, similar to while loop
+  puts i
+end           
+puts "done"
+
+# using conditionals within loops - 
+# the reserved words: next and break, as well as other methods can add conditional flow control within loops to alter their behavior
+
+
+# recursion ### - another way to create a loop in Ruby and is the act of calling a method from within itself
+def doubler(start)
+  puts start
+  if start < 10
+    doubler(start * 2)
+  end
+end
+
+def fibonacci(number)                         # example with fib sequence
+  if number < 2                               # baseline condition that returns a value => starts to "unwind" the recursive calls
+    number
+  else
+    fibonacci(number - 1) + fibonacci(n - 2)  # other condition where it calls itself
+  end
+end
+
+
+################################################################
+# iterators ### - they are methods that naturally loop over a given set of data
+# each iterator method - one method we've been commonly using
+names = ['Alex', 'Umi', 'Nuzzles', 'Lil Bit', 'Miss Business']    
+x = 1                           # lets iterate over the array and print a counter with the names
+names.each do |name|            # each method is called using dot operator do/end block with block parameter => new scope created from each method invocation
+  puts "#{x}. #{name}"          # print counter and name as method iterates through the array
+  x += 1                        # we add one to the counter since do/end block can access outside scoped variable
+end                             # => []'Alex', 'Umi', 'Nuzzles', 'Lil Bit', 'Miss Business']  // each returns original array
+
+# times iterator method - a super compact for loop 
+# 24.times { puts 'KOBE!'}      # one-line version
+24.times do                     # as a compact for loop, properties of for loops still apply
+  puts 'KOBE!'                  # no new scope created using the times iterator
+  b = 8                         # variable is in same scope as rest of program
+end                             
+puts b                          # => 8
+
+
+################################################################
+# puts method ### - puts is short for put string and is used to print a string followed by a newline character
