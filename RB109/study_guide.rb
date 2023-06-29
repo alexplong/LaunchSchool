@@ -233,14 +233,19 @@ hitchhiker ? puts(42) : puts(3.1415)      # bad - printing
 (4 == 4) || (5 == 5)  # => true   // only one side needs to evaluate to true to return true
 (4 == 5) || (5 == 5)  # => true   // left side evaluates to false so right side of || checked and returns true
 (4 == 4) || (4 == 7)  # => true   // right side is not evaluated at all due to short-circuit as left true returns true
-# important use with non bools    // the && and || operators also work with 'truthy' and 'falsey' values too
+# important use with non bools    // the && and || operators also work with 'truthy' and 'falsey' values and can return these values instead of bools
 3 || 'foo'            # => 3      // the return value is ALWAYS the value of the operand evaluated last, since 3 'truthy' and last evaluated > return 3
 'foo' || 3            # => "foo"  // "foo" is truthy > return "foo"
 nil || 'foo'          # => "foo"
 nil && 'foo'          # => nil    // since && operator and short-circuiting - nil is last operand to be evaluated
 3 && 'foo'            # => "foo"  // && operator - "foo" last evaluated
 'foo' && 3            # => 3
-
+foo = nil             # another interesting expression 
+bar = 'qux'
+is_ok = foo || bar                    # => 'qux'  // last evaluated operand is bar and 'qux' can be used as a 'truthy' value but it's not the best practice
+is_ok = (foo || bar) ? true : false   # a better way using ternary, if 'truthy' or 'falsey' > can set it to actual bool values 
+is_ok = !!(foo || bar)                # => true // another way is using the following !! which acts as two consecutive ! operators: 
+                                      # 'qux' is "truthy" so !'qux' # => false // then !false # => true is how we output true
 
 ################################################################
 # operator precedence ### - set of rules that dictates how Ruby determines what operands each operator takes
@@ -429,8 +434,9 @@ end                                                     # => "a is 4"   // if re
 # comparisons using equal to (==) operator, not equal to (!=) operator, and the <, >, <=, >= operators always returns a boolean
 4 == 5                                                  # => false
 (4 == 4) && (5 == 5)                                    # => true // can be combined to create more specific scenarios using && and || operators 
-                                                        # when operating on booleans, && and || will return true or false but not always the case
-                                                        # see short-circuiting above for more
+                                                        # when operating on booleans
+                                                        # operators: && and || will return true or false but NOT always the case
+                                                        # see SHORT-CIRCUITING SECTION above for more
 (4 == 5) || (5 == 5)                                    # => true // don't forget about short-circuiting and precedence when it comes to evaluation order
 # order of precedence is followed by Ruby when deciding how to evaluate multiple expressions
 # highest order of precedence (top) to lowest (bottom)
