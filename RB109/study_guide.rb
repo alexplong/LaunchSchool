@@ -342,13 +342,23 @@ puts MY_TEAM
 
 ################################################################
 # variables ### - local variables, constant names, initialization of variables, and reassignment
-i_am_a_variable = "Alex"      # snake case for local variables, methods, or file
+i_am_a_variable = "Alex"      # snake case for local variables, methods, or file. most common variable to come across and obeys all scope boundaries
 NEW_CONSTANT = "new constant" # capitalize constant variables
 class MyFirstClass            # pascal case for classes
                               # initialization of variable - where it's created detetrmines scope 
                               # with respect to inner and outer scope for accessibility
                               # assignment of variable performed using assignment operator =, reassignment also performed with = operator
 i_am_a_variable = "Plong"     # reassignment points the variable to a new String object rather than mutate the original object
+                              # unfamiliar stuff but in the book
+$global_variable = 'Alex'     # global variables are available throughout entire app overriding all scope boundaries # => Rubyists tend to stay away from global vars
+@@AClassVariable = 'Plong'    # class variables begin with two @ and accessible by instances of your class, as well as 
+                              # the class itself use class variable when you need to declare a var related to a class, 
+                              # but each instance of that class does not need its own value for this variable.
+                              # class variables must be initialized at the class level, outside of any method definitions
+                              # they can then be altered using class or instance method definitions
+@var = 'I am available throughout the current instance of this class.'  # instance variables declared by starting var with one @
+                                                                        # vars are available throughout current instance of parent class. more in OOP
+
 
 ################################################################
 # variable scope and method definitions ### 
@@ -560,4 +570,165 @@ puts b                          # => 8
 
 
 ################################################################
-# puts method ### - puts is short for put string and is used to print a string followed by a newline character
+# puts vs return ### - puts is short for put string and is used to print a string followed by a newline character
+# in Ruby, every method returns the evaluated result of the last line that is executed
+# if last line in method is puts method, whatever needs to print to console will but the method will return nil
+a = [1,2,3]
+def mutate(arr)               # last line of code in method definition gets implicitly returned
+  arr.pop                     # in implicit returns like this line, the rest of the rules are important so your method contains no side-effects
+#  puts "arr mutated"         # uncommenting this line changes what this method returns => from the 'popped' element to nil
+end                           # rules here are important for IMPLICIT returns, also ways to EXPLICITLY state the method return
+p a                           # => [1,2,3]  // printing a as initially defined
+p mutate(a)                   # => 3        // if the code puts "arr mutated" was uncommented, the method would return nil instead of 3
+p a                           # => [1,2]    // printing a after mutate method
+
+# implicit return 
+def add_3(number)
+  number + 3                  # again, Ruby methods ALWAYS return the evaluated result of the last line of the expression
+end                           # UNLESS there is an explicit return statement that comes before it
+returned_value = add_3(7) 
+puts returned_value           # => 10
+
+# explicit return
+def add_three(number)
+  return number + 3           # explicit return statement, it returns this line without executing the next
+  number + 4                  # we can test with puts "hello" here to find this line will not execute
+end                           # the reserved word return is NOT REQUIRED in order to return something from a method
+returned_value = add_three(7)
+p returned_value              # => 10
+
+# one more example
+def just_assignment(number)
+  foo = number + 3
+end
+puts just_assignment(2)       # =>  5 // value of this method call will be 5 because the assignment expression (foo = ) evaluates to 5 and thus returned
+
+
+################################################################
+# method definition and invocation ### - instead of writing pieces of code over and over, a feature in programming languages called a procedure
+# procedure, allows you to extract the common code to one place
+# in Ruby, we call it a method
+def say_hello(name='your name')   # method name defined with the reserved word def // parameters can be added with ( ) following naming of method
+  puts "Hello #{name}"            # method body goes here - new variable scope created - name local variable scoped at method definition level- inner and outer scope access DENIED
+end                               # end keyword denotes completion of method definition. this is example of method definition named say_hello
+say_hello('Alex')                 # => "Hello Alex"       // we invoke the say_hello method and pass in the String "Alex" as a parameter
+                                  #                       // parameters are required to pass in data outside of a method definition's scope
+say_hello                         # => "Hello your name"  // "your name" is the default parameter and if you don't pass string in as arg, default will take its place
+say_hello 'Umi'                   # => "Hello Umi"        // OPTIONAL PARENTHESIS!!! It's weird I know.... we're so used to JS
+                                  # ???lack of parenthesis could mess with precedence? maybe???
+
+
+################################################################
+# parameters vs arguments for methods ### - lets use the say_hello method again as example
+# method ARGUMENTS are when we call or invoke a method by typing the name of the method, we can also pass in arguments (name) see below
+
+# method PARAMETERS are used when data outside of a method definitions scope, but you need access to that data 
+# the (name) in the say_hello example above is called a parameter 
+
+def say_hello(name)               # name PARAMETER for say_hello method
+  puts "hello #{name}"
+end
+say_hello('Umi')                  # say_hello method is invoked and the string 'Umi' is passed as the ARGUMENT in place for the (name) PARAMETER
+
+# if method definition does not need access to any outside data, parameters DO NOT NEED TO BE DEFINED
+# ARGUMENTS are pieces of information that are sent to a method invocation to be modified or used to return a specific result
+
+# splat arguments - can cover later
+
+
+################################################################
+# output vs. return values, side effects ### - make sure that a method only does one thing and its responsibility is very limited
+### some guidelines on how to write good methods
+# - methods should NOT both display output and return a MEANINGFUL value # => focus on doing one or the other
+# => Ruby ALWAYS returns a value (value/bool/nil) 
+# - but focus on either display something or return a meaningful value - not both
+# - since Ruby ALWAYS returns a value => if a method displays something,
+# - then it shouldn't return a value that has any MEANING to the calling code
+
+# displaying output - can prefix methods that output values with something like print_, say_, or display_
+
+# a side effect ### - in programming is something that changes the state of a program outside the bounds of a programming unit.
+# things such as methods, class, or a block. If that code changes anything that is not strictly local to that code, it has side effects
+puts "hello #{name}"    # example from method above, printing somnething is a side effect since
+                        # it changes the contents of the display; that is not local to the code
+                        
+
+################################################################
+# pass-by-reference and pass-by-value ### - distinction for Ruby stems from trying to determine what happens to objects when passed into methods
+# can either treat these arguments as "references" to the original object or as "values" - which are copies of the original
+# what does pass by "value" mean      # => when you pass by value, the method only has a copy of the original object
+                                      # => operations performed on the object within the method have no effect on the original object outside of the method
+# what does pass by "reference" mean  # => when you pass by reference, the method is passed a pointer to the original object
+                                      # => even if declared a new variable, it would point to same address and operations performed
+                                      # => are able to mutate the original object
+# what does Ruby do?        # => Ruby exhibits combination of behaviors from both and some call this pass by reference value
+                            # => Ruby's variables do not contain values but rather they contain pointers or references to objects
+                            # => if a literal was passed to a method
+                            # => Ruby will first convert that literal to an object
+                            # => then internally, create a reference to the object
+                            # the most important concept to remember is:
+                            # => when an operation within the method mutates the caller or argument, it will affect the original object
+puts("I'm a String Object") # => puts method doesn't get passed the value "I'm a String Object" but rather a reference to a String object with the value "I'm a String Object"
+# see mutability and immutability section up top
+# determining what gets mutated is dependent on the operator, methods, and type of literal object 
+# methods that end in ! and shovel operator << are some examples of method and operator that mutate objects
+# Integers and Floats are immutable objects
+# Strings, Arrays, Hashes can be mutated depending on the operator or method used on them
+
+
+################################################################
+# call stack ### - helps Ruby keep track of what method is executing as well as where execution should resume when it returns
+# it works like a stack of books => can put a new book on top or remove 
+# => in the call stack, information about the current method is put on top of the stack
+# => then that information gets removed when the method returns
+# in Ruby, BLOCKS, PROCS, and LAMBDAS also use the same call stack Ruby uses for methods. We'll only talk about methods when discussing the stack for now
+def first
+  puts "first method"
+end
+def second
+  first
+  puts "second method"
+end
+second          # => [[main]] 
+                #    when this program starts running, call stack has one item called a stack frame - that represents 
+                #    the global (top-level) portion of the program. sometimes called the main method, this frame is
+                #    used to keep track of what part of the main program it is currently working on
+                # => [[main: line 692 # => second]] 
+                #    when program execution reaches method invocation on line 692, this updates main stack frame with the
+                #    current program location (692). Ruby uses location later to determine where execution should resume when 
+                #    'second' finishes running. 
+                #    After setting location in the current stack frame, Ruby creates a new stack for the second method and
+                #    places it on top of the call stack. We say that the new frame is pushed onto the stack. Note that the 
+                #    frame for second method is stacked on top of main frame. While second frame is still on the stack, main
+                #    remains stuck beneath it, inaccessible. At the same time, the main method becomes dormant and second method
+                #    becomes active.
+                # => [[main: line 692 # => second: line 689 # => first]]  
+                #    the second method calls the first method on line 689 and causes Ruby to update the second frame so Ruby will
+                #    know where to resume execution later. It then creates a new stack frame for the first method and pushes the new
+                #    frame onto the call stack. 
+                # => [[main: line 692 # => second: line 689 # => first: line 686 # => puts]]
+                #    Once first method starts executing, it invokes the puts method. All Ruby methods, including the built-in ones
+                #    share the same call stack. Like prior, calling puts causes Ruby to update the first frame puts likely has several
+                #    internal method calls but for simplicity, we will ignore and assume it logs "first method" to the console
+                #    and immediately returns.
+                # => [[main: line 692 # => second: line 689 # => first: line 686 # => --]]
+                #    when puts returns, Ruby POPS the top frame from the call stack leaving the previous stack frame exposed. Ruby
+                #    uses this frame to determine where execution should resume, in this case, immediately after line 686
+                # => [[main: line 692 # => second: line 689 # => -- # => --]]
+                #    eventually, the first method will return which leads to it getting popped from the stack. This exposes the stack
+                #    frame for second, and that tells Ruby it should resume execution on line 689. Next, execution jumps to puts call
+                #    on line 690
+                # => [[main: line 692 # => second: line 690 # => puts # => --]]
+                #    like before, the current location is updated and a new frame is pushed to the stack
+                #    when this puts call returns, the stack frame gets popped and execution returns to second
+                # => [[main: line 692 # => second: line 690 # => -- # => --]]
+                #    when second finishes executing, the stack frame for second gets popped from the call stack, exposing the stack frame
+                #    for main. the main frame tells reuby to resume execution on line 692
+                # => [[main: line 692 # => -- # => -- # => --]]
+                #    eventually, main method has no more code to run and when this happens, main frame gets popped from the stack and program ends
+
+
+################################################################
+# expressions and return ### - an expression is anything that can be evaluated, and pretty much everything you write in Ruby is an expression
+# in Ruby, an expression ALWAYS returns something => even if that's an error message or nil
+# see puts vs returns and side-effects for more details
