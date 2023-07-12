@@ -109,4 +109,100 @@
       # output:
         # sum: 19
 
-### data structure - 
+### data structure - use developed mental models to determine data strucutres we will work with to convert input to output
+# array seems like a good fit 
+# data structure will influence your algorithm
+
+### algorithm - objective is to determine a series of instructions that will transform the input to desired output
+# challenge is to get the right level of detail - something that can readily be converted to code without actually writing code
+# don't want it written at programming level so you don't lose flexibility during implementation
+# programming languages often provide several ways to achieve a given result, but each of those approaches can affect other parts of the program
+# if you implement a choice too soon by making it part of your algorithm, then later discover you should have chosen something else
+# you'll then need to go back and modify both the code and alogorithm
+# its not uncommon to change an algorithm once coding starts so don't feel constrained
+
+  # mental model # 2
+    ### - incrementally build a list of numbers that are multiples of a set of one or more factors
+    ### - add a multiple to the list only if it is not yet on the list
+    ### - computer and return the sum of the numbers on the list
+  # my mental model
+    ### - 
+
+# model 1 
+# 1. create an empty array called multiples that will store the multiple values
+# 2. check if factors list is empty, if empty set the factors list to [3, 5]
+# 3. for every factor in factors
+#     1. set current_multiple to factor to keep track of the multiples of factor
+#     2. while current_multiple < target
+#         1. append current_multiple to multiples
+#         2. add factor to current_multiple
+# 4. filter the multiples array and keep only unique values
+# 5. take sum of the array and return the sum value
+
+# model 2
+# 1. create an empty array called multiples that will store the values
+# 2. check if factors list is empty, if empty set factors list to [3, 5]
+# 3. for every factor in factors
+#     1. set current_multiple to factor to keep track of multiples of factor
+#     2. while current_multiple < target
+#         1. is current_multiple already in multiple?
+#             1. Yes - do nothing
+#             2. No - append current_multiple to multiple
+#     3. add factor to current_multiple
+# 4. take sum of the array and return the sum value
+
+# my model algorithm
+# 1. create an empty array called multiples that will store the multiple values
+# 2. check if factors list is empty, if empty set the factors list to [3, 5]
+# 3. iterate from 1 up to the target number
+#     1. for every factor in factors
+#         1. check if iterating number is divisible by factor
+#             1. Yes - append iterating value to multiples array and break from loop
+#             2. No - do nothing
+# 4. take sum of all numbers from multiples array and return the sum value
+
+# model 1
+def sum_of_multiples(target, factors)
+  multiples = []
+  factors = [3, 5] if factors.empty?
+
+  factors.each do |factor|
+    current_multiple = factor
+    while current_multiple < target
+      multiples << current_multiple
+      current_multiple += factor
+    end
+  end
+  multiples.uniq!
+  multiples.sum
+end
+
+# model 2
+def sum_of_multiples2(target, factors)
+  multiples = []
+  factors = [3, 5] if factors.empty?
+
+  factors.each do |factor|
+    current_multiple = factor
+    while current_multiple < target
+      multiples << current_multiple if !multiples.include?(current_multiple)
+      current_multiple += factor
+    end
+  end
+  multiples.sum
+end
+
+# my model
+def sum_of_multiples3(target, factors)
+  multiples = []
+  factors = [3, 5] if factors.empty?
+  for i in 1...target do
+    factors.each do |factor|
+      if i % factor == 0
+        multiples << i
+        break
+      end
+    end
+  end
+  multiples.sum
+end

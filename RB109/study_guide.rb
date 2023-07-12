@@ -611,9 +611,9 @@ puts just_assignment(2)       # =>  5 // value of this method call will be 5 bec
 def say_hello(name='your name')   # method name defined with the reserved word def // parameters can be added with ( ) following naming of method
   puts "Hello #{name}"            # method body goes here - new variable scope created - name local variable scoped at method definition level- inner and outer scope access DENIED
 end                               # end keyword denotes completion of method definition. this is example of method definition named say_hello
-say_hello('Alex')                 # => "Hello Alex"       // we invoke the say_hello method and pass in the String "Alex" as a parameter
-                                  #                       // parameters are required to pass in data outside of a method definition's scope
-say_hello                         # => "Hello your name"  // "your name" is the default parameter and if you don't pass string in as arg, default will take its place
+say_hello('Alex')                 # => "Hello Alex"       // we invoke the say_hello method and pass in the String "Alex" as an argument
+                                  #                       // arguments are required to pass in data outside of a method definition's scope
+say_hello                         # => "Hello your name"  // "your name" is the default argument and if you don't pass string in as arg, default will take its place
 say_hello 'Umi'                   # => "Hello Umi"        // OPTIONAL PARENTHESIS!!! It's weird I know.... we're so used to JS
                                   # ???lack of parenthesis could mess with precedence? maybe???
 
