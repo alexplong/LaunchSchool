@@ -1,20 +1,20 @@
 
 a = "I want to be lowercase"
 array = [1, 2, 3, 4, 5]
-p(array.select do |num|           # p method 
+p(array.select do |num|           
 	puts num if num.odd?
 	a.upcase!
 end)
 
+p(array.select do |num|
+  puts num if num.odd?
+  # a.upcase!
+end)
+
+
 # What is returned? nil returned by select call
 # What is output?   # => [1, 3, 5] from invoking select # => 
 # What is the value of a after the code is executed? 
-
-# (I adapted this problem from 'code block 3' in the first set of problems posted to this channel, 
-# after playing around with it in my code editor. I hope people find this kind of slightly devious 
-# problem useful... They definitely help me get into the weeds and understand some of the more 
-# obscure aspects of methods from RB101)
-
 
 
 # p method invocation passing in expression in as an argument
