@@ -49,6 +49,19 @@ def initialize_players
   [first_player, second_player]
 end
 
+def player_select(brd, first_player)
+  if brd.values.all?(' ')
+    prompt "#{first_player} goes first for this game."
+    prompt "Press Enter to continue."
+    x = gets
+  end
+end
+
+def alternate_player(player)
+  if player == "Computer" then "Player" else "Computer" end
+end    
+
+
 def empty_squares(brd)
   brd.keys.select { |pos| brd[pos] == INITIAL_MARKER }
 end
@@ -153,30 +166,20 @@ score = initialize_score
 loop do
   board = initialize_board
   first_player, second_player = initialize_players
-  
+  current_player = first_player
+
   loop do
     display_board(board, score)
-    prompt "#{first_player} goes first for this game." if board.values.all?(" ")
+    player_select(board, first_player)
 
-    make_move(board, first_player)
+    make_move(board, current_player)
+    current_player = alternate_player(current_player)
     if someone_won_game?(board)
       update_score(score, detect_game_winner(board))
       break
-    end
-    
-    display_board(board, score)
-    prompt "#{first_player} goes first for this game." 
-
-    break if board_full?(board)
-
-    make_move(board, second_player)
-    if someone_won_game?(board)
-      update_score(score, detect_game_winner(board))
+    elsif board_full?(board)
       break
     end
-
-    break if board_full?(board)
-
   end
 
   display_board(board, score)
