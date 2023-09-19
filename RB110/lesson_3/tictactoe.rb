@@ -48,7 +48,7 @@ def empty_squares(brd)
 end
 
 def joinor(open_squares, punctuation=', ', join_word='or')
-  open_squares[-1] = "#{join_word} #{open_squares[-1]}"
+  open_squares[-1] = "#{join_word} #{open_squares[-1]}" if open_squares.length > 1
   open_squares.join(punctuation)
 end
 
@@ -64,9 +64,24 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def find_at_risk_square(brd)
+  WINNING_LINES.each do |line|
+    if brd.values_at(*line).count(PLAYER_MARKER) > 1 && brd.values_at(*line).count(INITIAL_MARKER) == 1
+      return (line.reject { |n| brd[n] == PLAYER_MARKER }[0])
+    end
+  end
+  nil
+end
+
 def computer_places_piece!(brd)
-  square = empty_squares(brd).sample
-  brd[square] = COMPUTER_MARKER
+  if !!find_at_risk_square(brd)
+    at_risk_square = find_at_risk_square(brd)
+    # binding.pry
+    brd[at_risk_square] = COMPUTER_MARKER
+  else 
+    square = empty_squares(brd).sample
+    brd[square] = COMPUTER_MARKER
+  end
 end
 
 def board_full?(brd)
@@ -110,26 +125,33 @@ loop do
 
   loop do
     display_board(board, score)
-
     player_places_piece!(board)
-    break if someone_won_game?(board) || board_full?(board)
+    if someone_won_game?(board)
+      update_score(score, detect_game_winner(board))
+      break
+    end
 
+    break if board_full?(board)
+  
     computer_places_piece!(board)
-    break if someone_won_game?(board) || board_full?(board)
+    if someone_won_game?(board)
+      update_score(score, detect_game_winner(board))
+      break
+    end
+
+    break if board_full?(board)
+
   end
 
   display_board(board, score)
 
-  if someone_won_game?(board)
-    update_score(score, detect_game_winner(board))
+  if someone_won_series?(score)
+    prompt "#{detect_series_winner(score)} reached 5 points first. #{detect_series_winner(score)} won the series!!!!"
+    return
+  elsif someone_won_game?(board)
     prompt "#{detect_game_winner(board)} won game!"
   else
     prompt "It's a tie!"
-  end
-
-  if someone_won_series?(score)
-    prompt "#{detect_series_winner(score)} won the series!!!!"
-    return
   end
 
   prompt "Continue? (y or n)"
