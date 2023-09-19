@@ -43,6 +43,12 @@ def initialize_score
   { "Player"=> 0, "Computer"=> 0 }
 end
 
+def initialize_players
+  first_player = ["Computer", "Player"].sample
+  second_player = first_player == "Computer" ? "Player" : "Computer"
+  [first_player, second_player]
+end
+
 def empty_squares(brd)
   brd.keys.select { |pos| brd[pos] == INITIAL_MARKER }
 end
@@ -99,6 +105,14 @@ def computer_places_piece!(brd)
   end
 end
 
+def make_move(brd, player)
+  if player == "Computer"
+    computer_places_piece!(brd)
+  elsif player == "Player"
+    player_places_piece!(brd)
+  end
+end
+
 def board_full?(brd)
   empty_squares(brd).empty?
 end
@@ -135,20 +149,27 @@ end
 
 score = initialize_score
 
+
 loop do
   board = initialize_board
-
+  first_player, second_player = initialize_players
+  
   loop do
     display_board(board, score)
-    player_places_piece!(board)
+    prompt "#{first_player} goes first for this game." if board.values.all?(" ")
+
+    make_move(board, first_player)
     if someone_won_game?(board)
       update_score(score, detect_game_winner(board))
       break
     end
+    
+    display_board(board, score)
+    prompt "#{first_player} goes first for this game." 
 
     break if board_full?(board)
-  
-    computer_places_piece!(board)
+
+    make_move(board, second_player)
     if someone_won_game?(board)
       update_score(score, detect_game_winner(board))
       break
