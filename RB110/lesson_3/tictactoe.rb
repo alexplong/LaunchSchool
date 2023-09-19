@@ -6,6 +6,7 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
+CENTER_POSITION = 5
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -14,18 +15,20 @@ end
 # rubocop:disable Metrics/AbcSize
 def display_board(brd, score)
   system "clear"
-  puts "Player is #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}"
-  puts "Player Score: #{score["Player"]}"
-  puts "Computer Score: #{score["Computer"]}"
-  puts ""
-  puts "     |     |"
-  puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
-  puts "     |     |"
-  puts "-----+-----+-----"
-  puts "     |     |"
-  puts "  #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}"
-  puts "     |     |"
-  puts "-----+-----+-----"
+  puts "------------------------------"
+  puts "| Player is #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER} |"
+  puts "| Player Score: #{score["Player"]}            |"
+  puts "| Computer Score: #{score["Computer"]}          |"
+  puts "------------------------------"
+  puts ""     
+  puts "     |     |                  +-+-+-+"
+  puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}               |1|2|3|"
+  puts "     |     |                  +-+-+-+"
+  puts "-----+-----+-----             |4|5|6|"
+  puts "     |     |                  +-+-+-+"
+  puts "  #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}               |7|8|9|"
+  puts "     |     |                  +-+-+-+"
+  puts "-----+-----+-----            POSITIONS"
   puts "     |     |"
   puts "  #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}"
   puts "     |     |"
@@ -43,17 +46,17 @@ def initialize_score
   { "Player"=> 0, "Computer"=> 0 }
 end
 
-def initialize_players
+def initialize_player_order
   first_player = ["Computer", "Player"].sample
   second_player = first_player == "Computer" ? "Player" : "Computer"
   [first_player, second_player]
 end
 
-def player_select(brd, first_player)
-  if brd.values.all?(' ')
+def announce_player_order(brd, first_player)
+  if brd.values.all?(INITIAL_MARKER)
     prompt "#{first_player} goes first for this game."
-    prompt "Press Enter to continue."
-    x = gets
+    prompt "Press Enter to ready to start."
+    gets
   end
 end
 
@@ -66,9 +69,9 @@ def empty_squares(brd)
   brd.keys.select { |pos| brd[pos] == INITIAL_MARKER }
 end
 
-def joinor(open_squares, punctuation=', ', join_word='or')
-  open_squares[-1] = "#{join_word} #{open_squares[-1]}" if open_squares.length > 1
-  open_squares.join(punctuation)
+def joinor(open_squares, delimiter=', ', word='or')
+  open_squares[-1] = "#{word} #{open_squares[-1]}" if open_squares.length > 1
+  open_squares.join(delimiter)
 end
 
 def player_places_piece!(brd)
@@ -83,8 +86,8 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
-def square_5_open?(brd)
-  brd[5] == INITIAL_MARKER
+def center_square_open?(brd)
+  brd[CENTER_POSITION] == INITIAL_MARKER
 end
 
 def find_winning_square(brd)
@@ -104,8 +107,8 @@ def find_at_risk_square(brd)
 end
 
 def computer_places_piece!(brd)
-  if square_5_open?(brd)
-    brd[5] = COMPUTER_MARKER
+  if center_square_open?(brd)
+    brd[CENTER_POSITION] = COMPUTER_MARKER
   elsif !!find_winning_square(brd)
     winning_square = find_winning_square(brd)
     brd[winning_square] = COMPUTER_MARKER
@@ -155,7 +158,7 @@ end
 
 def detect_series_winner(score)
   score.each do |player, score| 
-    return player  if score >= 5
+    return player if score >= 5
   end
   nil
 end
@@ -165,12 +168,12 @@ score = initialize_score
 
 loop do
   board = initialize_board
-  first_player, second_player = initialize_players
+  first_player, second_player = initialize_player_order
   current_player = first_player
 
   loop do
     display_board(board, score)
-    player_select(board, first_player)
+    announce_player_order(board, first_player)
 
     make_move(board, current_player)
     current_player = alternate_player(current_player)
