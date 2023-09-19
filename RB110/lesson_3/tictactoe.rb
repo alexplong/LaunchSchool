@@ -12,15 +12,15 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
-# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 def display_board(brd, score)
   system "clear"
   puts "------------------------------"
   puts "| Player is #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER} |"
-  puts "| Player Score: #{score["Player"]}            |"
-  puts "| Computer Score: #{score["Computer"]}          |"
+  puts "| Player Score: #{score['Player']}            |"
+  puts "| Computer Score: #{score['Computer']}          |"
   puts "------------------------------"
-  puts ""     
+  puts ""
   puts "     |     |                  +-+-+-+"
   puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}               |1|2|3|"
   puts "     |     |                  +-+-+-+"
@@ -34,7 +34,7 @@ def display_board(brd, score)
   puts "     |     |"
   puts ""
 end
-# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
 def initialize_board
   new_board = {}
@@ -43,13 +43,11 @@ def initialize_board
 end
 
 def initialize_score
-  { "Player"=> 0, "Computer"=> 0 }
+  { "Player" => 0, "Computer" => 0 }
 end
 
 def initialize_player_order
-  first_player = ["Computer", "Player"].sample
-  second_player = first_player == "Computer" ? "Player" : "Computer"
-  [first_player, second_player]
+  ["Computer", "Player"].sample
 end
 
 def announce_player_order(brd, first_player)
@@ -62,8 +60,7 @@ end
 
 def alternate_player(player)
   if player == "Computer" then "Player" else "Computer" end
-end    
-
+end
 
 def empty_squares(brd)
   brd.keys.select { |pos| brd[pos] == INITIAL_MARKER }
@@ -92,16 +89,18 @@ end
 
 def find_winning_square(brd)
   WINNING_LINES.each do |line|
-    return (line.reject { |n| brd[n] == COMPUTER_MARKER }[0]) if brd.values_at(*line).count(COMPUTER_MARKER) > 1 && 
-                                                               brd.values_at(*line).count(INITIAL_MARKER) == 1
-  end   
+    return (line.reject { |n| brd[n] == COMPUTER_MARKER }[0]) if
+    brd.values_at(*line).count(COMPUTER_MARKER) > 1 &&
+    brd.values_at(*line).count(INITIAL_MARKER) == 1
+  end
   nil
 end
 
 def find_at_risk_square(brd)
   WINNING_LINES.each do |line|
-    return (line.reject { |n| brd[n] == PLAYER_MARKER }[0]) if brd.values_at(*line).count(PLAYER_MARKER) > 1 && 
-                                                               brd.values_at(*line).count(INITIAL_MARKER) == 1
+    return (line.reject { |n| brd[n] == PLAYER_MARKER }[0]) if
+    brd.values_at(*line).count(PLAYER_MARKER) > 1 &&
+    brd.values_at(*line).count(INITIAL_MARKER) == 1
   end
   nil
 end
@@ -115,7 +114,7 @@ def computer_places_piece!(brd)
   elsif !!find_at_risk_square(brd)
     at_risk_square = find_at_risk_square(brd)
     brd[at_risk_square] = COMPUTER_MARKER
-  else 
+  else
     square = empty_squares(brd).sample
     brd[square] = COMPUTER_MARKER
   end
@@ -157,18 +156,17 @@ def someone_won_series?(score)
 end
 
 def detect_series_winner(score)
-  score.each do |player, score| 
-    return player if score >= 5
+  score.each do |player, points|
+    return player if points >= 5
   end
   nil
 end
 
 score = initialize_score
 
-
 loop do
   board = initialize_board
-  first_player, second_player = initialize_player_order
+  first_player = initialize_player_order
   current_player = first_player
 
   loop do
@@ -188,7 +186,9 @@ loop do
   display_board(board, score)
 
   if someone_won_series?(score)
+    # rubocop:disable Layout/LineLength
     prompt "#{detect_series_winner(score)} reached 5 points first. #{detect_series_winner(score)} won the series!!!!"
+    # rubocop:enable Layout/LineLength
     return
   elsif someone_won_game?(board)
     prompt "#{detect_game_winner(board)} won game!"
