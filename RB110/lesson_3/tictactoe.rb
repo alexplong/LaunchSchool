@@ -64,19 +64,34 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def square_5_open?(brd)
+  brd[5] == INITIAL_MARKER
+end
+
+def find_winning_square(brd)
+  WINNING_LINES.each do |line|
+    return (line.reject { |n| brd[n] == COMPUTER_MARKER }[0]) if brd.values_at(*line).count(COMPUTER_MARKER) > 1 && 
+                                                               brd.values_at(*line).count(INITIAL_MARKER) == 1
+  end   
+  nil
+end
+
 def find_at_risk_square(brd)
   WINNING_LINES.each do |line|
-    if brd.values_at(*line).count(PLAYER_MARKER) > 1 && brd.values_at(*line).count(INITIAL_MARKER) == 1
-      return (line.reject { |n| brd[n] == PLAYER_MARKER }[0])
-    end
+    return (line.reject { |n| brd[n] == PLAYER_MARKER }[0]) if brd.values_at(*line).count(PLAYER_MARKER) > 1 && 
+                                                               brd.values_at(*line).count(INITIAL_MARKER) == 1
   end
   nil
 end
 
 def computer_places_piece!(brd)
-  if !!find_at_risk_square(brd)
+  if square_5_open?(brd)
+    brd[5] = COMPUTER_MARKER
+  elsif !!find_winning_square(brd)
+    winning_square = find_winning_square(brd)
+    brd[winning_square] = COMPUTER_MARKER
+  elsif !!find_at_risk_square(brd)
     at_risk_square = find_at_risk_square(brd)
-    # binding.pry
     brd[at_risk_square] = COMPUTER_MARKER
   else 
     square = empty_squares(brd).sample
