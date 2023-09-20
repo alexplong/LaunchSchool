@@ -53,7 +53,7 @@ end
 def announce_player_order(brd, first_player)
   if brd.values.all?(INITIAL_MARKER)
     prompt "#{first_player} goes first for this game."
-    prompt "Press Enter to ready to start."
+    prompt "Press Enter to start."
     gets
   end
 end
@@ -196,9 +196,9 @@ loop do
     prompt "It's a tie!"
   end
 
-  prompt "Continue? (y or n)"
+  prompt "Press Enter to Continue? (n to quit)"
   answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  break if answer.downcase.start_with?('n')
 end
 
 prompt "Thanks for playing Tic Tac Toe! Good bye!"
