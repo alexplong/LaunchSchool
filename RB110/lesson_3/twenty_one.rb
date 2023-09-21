@@ -8,16 +8,15 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
-def player_turn_prompt(player_hand, dealer_hand)
-  system "clear"
-  puts "Dealer has: #{dealer_hand[0][1]} and unknown card"
-  puts "You have: #{joinor(player_hand)}"
+def player_turn_prompt(player_hand)
+  puts ""
+  puts "Your cards are now: #{joinor(player_hand)}"
+  puts "Your total is now: #{total(player_hand)}"
 end
 
-def dealer_turn_prompt(player_hand, dealer_hand)
-  system "clear"
-  puts "Dealer has: #{joinor(dealer_hand)}"
-  puts "You have: #{joinor(player_hand)}"
+def dealer_turn_prompt(dealer_hand)
+  puts ""
+  puts "Dealer cards are now: #{joinor(dealer_hand)}"
 end
 
 def detect_result(dealer_hand, player_hand)
@@ -65,7 +64,7 @@ def initialize_deck
   deck.shuffle
 end
 
-def deal_cards(deck, player_hand, dealer_hand)
+def deal_initial_cards(deck, player_hand, dealer_hand)
   2.times do
     player_hand << deck.pop
     dealer_hand << deck.pop
@@ -118,6 +117,11 @@ def bust?(cards)
   total(cards) > 21
 end
 
+def continue_prompt
+  prompt "Press Enter to continue."
+  gets
+end
+
 def play_again?
   puts "Would you like to play again? (y or n)"
   again = gets.chomp
@@ -129,41 +133,57 @@ loop do
   player_hand = []
 
   deck = initialize_deck
-  deal_cards(deck, player_hand, dealer_hand)
+  deal_initial_cards(deck, player_hand, dealer_hand)
 
-  player_turn_prompt(player_hand, dealer_hand)
+  puts "Dealer has: #{dealer_hand[0][1]} and unknown card"
+  puts "You have: #{joinor(player_hand)}, for a total of #{total(player_hand)}"
 
   # player turn
   loop do
     prompt("Would you like to hit or stay?")
     player_input = gets.chomp
-    hit(deck, player_hand) if player_input.downcase.start_with?('h')
-    player_turn_prompt(player_hand, dealer_hand)
+    puts ""
+    if player_input.downcase.start_with?('h')
+      prompt "You decided to hit!"
+      hit(deck, player_hand)
+      player_turn_prompt(player_hand)
+    else
+      prompt "You decided to stay!"
+    end
     break if player_input.downcase.start_with?('s') || bust?(player_hand)
   end
 
   if bust?(player_hand)
-    puts "Sorry you busted your hand." 
+    puts "Sorry you busted your hand."
     break if play_again?
   else
     puts "Dealer turn!"
   end
 
   # dealer turn
+  continue_prompt
+  puts "Dealer cards are: #{joinor(dealer_hand)}, for a total of #{total(dealer_hand)}"
+  # dealer turn goes too fast: add prompt when decide to hit and stay
   loop do
-    dealer_turn_prompt(player_hand, dealer_hand)
-    break if total(dealer_hand) >= 17 || bust?(dealer_hand)
-    puts "Dealer will hit! Press any key to continue"
-    gets
-    hit(deck, dealer_hand)
+    if total(dealer_hand) >= 17 || bust?(dealer_hand)
+      puts "Dealer will stay! Let's compare cards!"
+      break
+    else
+      puts "Dealer will hit!"
+      hit(deck, dealer_hand)
+      dealer_turn_prompt(dealer_hand)
+      continue_prompt
+    end
   end
+
+  continue_prompt
 
   # both player and dealer stays - compare cards
   puts "============"
   puts "Dealer has #{joinor(dealer_hand)}, for a total of: #{total(dealer_hand)}"
   puts "Player has #{joinor(player_hand)}, for a total of: #{total(player_hand)}"
   puts "============"
-
+  puts ""
   display_result(dealer_hand, player_hand)
   break if play_again?
 end
