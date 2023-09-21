@@ -3,6 +3,10 @@ require "pry"
 SUITS = %w(H D C S)
 VALUES = ('2'..'10').to_a +
          %w(J Q K A)
+STOP_HIT = 17
+WIN_SCORE = 21
+FACE_CARD = 10
+ACES = 11
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -23,9 +27,9 @@ def detect_result(dealer_hand, player_hand)
   player_total = total(player_hand)
   dealer_total = total(dealer_hand)
 
-  if player_total > 21
+  if player_total > WIN_SCORE
     :player_busted
-  elsif dealer_total > 21
+  elsif dealer_total > WIN_SCORE
     :dealer_busted
   elsif dealer_total > player_total
     :dealer
@@ -51,6 +55,15 @@ def display_result(dealer_hand, player_hand)
   when :tie
     prompt "It's a tie!"
   end
+end
+
+def end_of_round_output(dealer_hand, player_hand, dealer_total, player_total)
+  puts ""
+  puts "============"
+  puts "Dealer has #{joinor(dealer_hand)}, for a total of: #{dealer_total}"
+  puts "Player has #{joinor(player_hand)}, for a total of: #{player_total}"
+  puts "============"
+  puts ""
 end
 
 # refactor: improve with Array#product
@@ -88,14 +101,14 @@ end
 
 def add_score(point_total, card)
   if card == "A"
-    point_total += 11
+    point_total += ACES
   elsif card != card.to_i.to_s
-    point_total += 10
+    point_total += FACE_CARD
   else
     point_total += card.to_i
   end
 
-  point_total -= 10 if point_total > 21 && card == "A"
+  point_total -= 10 if point_total > WIN_SCORE && card == "A"
   point_total
 end
 
@@ -108,16 +121,16 @@ def total(cards)
 
   values.each do |card|
     if card == "A"
-      sum += 11
+      sum += ACES
       aces += 1
     elsif card != card.to_i.to_s
-      sum += 10
+      sum += FACE_CARD
     else
       sum += card.to_i
     end
   end
 
-  while sum > 21 && aces > 0
+  while sum > WIN_SCORE && aces > 0
     sum -= 10
     aces -= 1
   end
@@ -127,7 +140,7 @@ end
 # rubocop:enable Metrics/MethodLength
 
 def bust?(current_total)
-  current_total > 21
+  current_total > WIN_SCORE
 end
 
 def continue_prompt
@@ -148,6 +161,7 @@ def play_again?
 end
 
 loop do
+  system "clear"
   dealer_hand = []
   player_hand = []
 
@@ -179,8 +193,9 @@ loop do
   end
 
   if bust?(player_total)
-    puts "Sorry you busted your hand."
-    break if play_again?
+    end_of_round_output(dealer_hand, player_hand, dealer_total, player_total)
+    display_result(dealer_hand, player_hand)
+    play_again? ? next : break 
   else
     puts "Dealer turn!"
 
@@ -189,8 +204,7 @@ loop do
     puts "Dealer cards are: #{joinor(dealer_hand)}, for a total of #{dealer_total}"
     # dealer turn goes too fast: add prompt when decide to hit and stay
     loop do
-      if dealer_total >= 17 || bust?(dealer_total)
-        puts "Dealer will stay! Let's compare cards!"
+      if dealer_total >= STOP_HIT || bust?(dealer_total)
         break
       else
         puts "Dealer will hit!"
@@ -201,18 +215,18 @@ loop do
       end
     end
   end
-    continue_prompt
 
-    # both player and dealer stays - compare cards
-    puts "============"
-    puts "Dealer has #{joinor(dealer_hand)}, for a total of: #{dealer_total}"
-    puts "Player has #{joinor(player_hand)}, for a total of: #{player_total}"
-    puts "============"
-    puts ""
+  if bust?(dealer_total)
+    end_of_round_output(dealer_hand, player_hand, dealer_total, player_total)
     display_result(dealer_hand, player_hand)
-    if play_again?
-      system "clear"
-    else
-      break
-    end
+    play_again? ? next : break 
+  else
+    puts "Dealer will stay! Let's compare cards!"
+  end
+  continue_prompt
+
+  # both player and dealer stays - compare cards
+  end_of_round_output(dealer_hand, player_hand, dealer_total, player_total)
+  display_result(dealer_hand, player_hand)
+  break unless play_again?  # Y works here
 end
