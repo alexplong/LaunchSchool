@@ -8,10 +8,10 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
-def player_turn_prompt(player_hand)
+def player_turn_prompt(player_hand, player_total)
   puts ""
   puts "Your cards are now: #{joinor(player_hand)}"
-  puts "Your total is now: #{total(player_hand)}"
+  puts "Your total is now: #{player_total}"
 end
 
 def dealer_turn_prompt(dealer_hand)
@@ -86,6 +86,19 @@ def hit(deck, curr_player)
   curr_player << deck.pop
 end
 
+def add_score(point_total, card)
+  if card == "A"
+    point_total += 11
+  elsif card != card.to_i.to_s
+    point_total += 10
+  else
+    point_total += card.to_i
+  end
+
+  point_total -= 10 if point_total > 21 && card == "A"
+  point_total
+end
+
 # rubocop:disable Metrics/MethodLength
 def total(cards)
   values = cards.map { |card| card[1] }
@@ -113,8 +126,8 @@ def total(cards)
 end
 # rubocop:enable Metrics/MethodLength
 
-def bust?(cards)
-  total(cards) > 21
+def bust?(current_total)
+  current_total > 21
 end
 
 def continue_prompt
@@ -124,8 +137,14 @@ end
 
 def play_again?
   puts "Would you like to play again? (y or n)"
-  again = gets.chomp
-  again.downcase.start_with?('n')
+  again = nil
+  loop do
+    again = gets.chomp
+    break if again != nil && ['y', 'n'].include?(again.downcase[0])
+    puts "Please enter a valid selection."
+  end
+  puts ""
+  again.downcase.start_with?('y')
 end
 
 loop do
@@ -134,9 +153,12 @@ loop do
 
   deck = initialize_deck
   deal_initial_cards(deck, player_hand, dealer_hand)
+  
+  player_total = total(player_hand)
+  dealer_total = total(dealer_hand)
 
   puts "Dealer has: #{dealer_hand[0][1]} and unknown card"
-  puts "You have: #{joinor(player_hand)}, for a total of #{total(player_hand)}"
+  puts "You have: #{joinor(player_hand)}, for a total of #{player_total}"
 
   # player turn
   loop do
@@ -146,44 +168,51 @@ loop do
     if player_input.downcase.start_with?('h')
       prompt "You decided to hit!"
       hit(deck, player_hand)
-      player_turn_prompt(player_hand)
-    else
+      player_total = add_score(player_total, player_hand[-1][1])
+      player_turn_prompt(player_hand, player_total)
+    elsif player_input.downcase.start_with?('s')
       prompt "You decided to stay!"
+    else
+      prompt "Please enter a valid selection."
     end
-    break if player_input.downcase.start_with?('s') || bust?(player_hand)
+    break if player_input.downcase.start_with?('s') || bust?(player_total)
   end
 
-  if bust?(player_hand)
+  if bust?(player_total)
     puts "Sorry you busted your hand."
     break if play_again?
   else
     puts "Dealer turn!"
-  end
 
-  # dealer turn
-  continue_prompt
-  puts "Dealer cards are: #{joinor(dealer_hand)}, for a total of #{total(dealer_hand)}"
-  # dealer turn goes too fast: add prompt when decide to hit and stay
-  loop do
-    if total(dealer_hand) >= 17 || bust?(dealer_hand)
-      puts "Dealer will stay! Let's compare cards!"
-      break
-    else
-      puts "Dealer will hit!"
-      hit(deck, dealer_hand)
-      dealer_turn_prompt(dealer_hand)
-      continue_prompt
+    # dealer turn
+    continue_prompt
+    puts "Dealer cards are: #{joinor(dealer_hand)}, for a total of #{dealer_total}"
+    # dealer turn goes too fast: add prompt when decide to hit and stay
+    loop do
+      if dealer_total >= 17 || bust?(dealer_total)
+        puts "Dealer will stay! Let's compare cards!"
+        break
+      else
+        puts "Dealer will hit!"
+        hit(deck, dealer_hand)
+        dealer_total = add_score(dealer_total, dealer_hand[-1][1])
+        dealer_turn_prompt(dealer_hand)
+        continue_prompt
+      end
     end
   end
+    continue_prompt
 
-  continue_prompt
-
-  # both player and dealer stays - compare cards
-  puts "============"
-  puts "Dealer has #{joinor(dealer_hand)}, for a total of: #{total(dealer_hand)}"
-  puts "Player has #{joinor(player_hand)}, for a total of: #{total(player_hand)}"
-  puts "============"
-  puts ""
-  display_result(dealer_hand, player_hand)
-  break if play_again?
+    # both player and dealer stays - compare cards
+    puts "============"
+    puts "Dealer has #{joinor(dealer_hand)}, for a total of: #{dealer_total}"
+    puts "Player has #{joinor(player_hand)}, for a total of: #{player_total}"
+    puts "============"
+    puts ""
+    display_result(dealer_hand, player_hand)
+    if play_again?
+      system "clear"
+    else
+      break
+    end
 end
