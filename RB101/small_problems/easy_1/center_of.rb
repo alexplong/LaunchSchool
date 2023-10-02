@@ -1,9 +1,11 @@
 def center_of(phrase)
 
-  double = phrase.length.even? ? true : false
-  half = phrase.length / 2
-
-  if double then "#{phrase[half - 1]}#{phrase[half]}" else "#{phrase[half]}" end
+  # old
+  # double = phrase.length.even? ? true : false
+  # half = phrase.length / 2
+  # if double then "#{phrase[half - 1]}#{phrase[half]}" else "#{phrase[half]}" end
+  
+  if phrase.length.odd? then phrase[phrase.length / 2] else phrase[(phrase.length / 2) - 1, 2] end
 
 end
 
