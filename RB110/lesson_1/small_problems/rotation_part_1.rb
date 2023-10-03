@@ -1,5 +1,4 @@
 def rotate_array(input)
-
   output = input.map {|a| a}
   output.push(output.shift)
 end
