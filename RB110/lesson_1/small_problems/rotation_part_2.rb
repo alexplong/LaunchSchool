@@ -6,13 +6,11 @@ end
 def rotate_rightmost_digits(number, digits)
 
   number_string = number.to_s
-  if digits == number_string.length
-    return rotate_array(number.to_s.chars).join.to_i
-
-  end
+  return rotate_array(number.to_s.chars).join.to_i if digits == number_string.length
+  
   front_half = number_string[0..number_string.length - 1 - digits]
-  back_half = number_string[-digits..-1].chars
-  back_half.push(back_half.shift)
+  back_half = rotate_array(number_string[-digits..-1].chars)
+  
   (front_half + back_half.join('')).to_i
 end
 

@@ -16,12 +16,21 @@ def rotate_rightmost_digits(number, digits)
   (front_half + back_half.join('')).to_i
 end
 
+# def max_rotation(input)
+#   counter = input.to_s.length
+#   loop do
+#     input = rotate_rightmost_digits(input, counter)
+#     counter -= 1
+#     break if counter == 0
+#   end
+#   input
+# end
+
 def max_rotation(input)
-  counter = input.to_s.length
-  loop do
-    input = rotate_rightmost_digits(input, counter)
-    counter -= 1
-    break if counter == 0
+  digit = input.to_s.length
+  while digit > 0
+    input = rotate_rightmost_digits(input, digit)
+    digit -= 1
   end
   input
 end
