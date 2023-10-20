@@ -1,31 +1,28 @@
-=begin
-Given non empty string check if it can be constructed by taking a substring of it an appending multiple copies of substring together. Assume given string consists of lowercase English letters only.
-Example 1: 
-Input: 'abab'
-Output: true 
-Explanation: It's the substring 'ab' twice.
-Example 2: 
-Input: 'aba'
-Output: false
-Explanation: String cannot be constructed from repeating substring. 
-p repeated_substring_patten('abab') == true
-p repeated_substring_patten('aba') == false
-p repeated_substring_patten('aabaaba') == false
-p repeated_substring_patten('abaababaab') == true 
-p repeated_substring_patten('abcabcabcabc') == true 
+def transpose(arrs)
+	new_arrs = arrs.map {|arr| arr.map {nil}}
 
-Explicit/Implicit:
-- substring is prefix and should begin from index 0
-- prefix substring at most is half the string
-  - a substring of half and not a prefix can immediately return false
-- substrings also need to be a common denominator of string length limiting amount of recursion/dynamic programming to look up substrings
+	arrs.each_with_index do |sub_arr, x|
 
-- Given a string `str` as input
-- 
+		sub_arr.each_with_index do |_, y|
+			new_arrs[x][y], new_arrs[y][x] = arrs[y][x], arrs[x][y] if (new_arrs[x][y] == nil && new_arrs[y][x] == nil)
 
-=end 
+      # new_arrs[y][x] = arrs[x][y] if new_arrs[y][x] == nil
+      # new_arrs[x][y] = arrs[y][x] if new_arrs[x][y] == nil
+		end
 
-def repeated_substring_patten(str)
-
+	end
+	
+new_arrs
 
 end
+
+matrix = [
+  [1, 5, 8],
+  [4, 7, 2],
+  [3, 9, 6]
+]
+
+new_matrix = transpose(matrix)
+
+p new_matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
+p matrix == [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
