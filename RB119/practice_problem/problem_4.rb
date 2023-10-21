@@ -42,6 +42,7 @@
 # 
 ## Code with Intent
 #
+
 def closest_numbers(numbers)
 
   closest_pairs = []
@@ -63,9 +64,9 @@ def closest_numbers(numbers)
   closest_pairs
 end
 
-p closest_numbers([5, 25, 15, 11, 20]) #== [15, 11]
-p closest_numbers([19, 25, 32, 4, 27, 16]) #== [25, 27]
-p closest_numbers([12, 7, 17]) #== [12, 7]
+p closest_numbers([5, 25, 15, 11, 20]) == [15, 11]
+p closest_numbers([19, 25, 32, 4, 27, 16]) == [25, 27]
+p closest_numbers([12, 7, 17]) == [12, 7]
 
 
 ## time 25 min

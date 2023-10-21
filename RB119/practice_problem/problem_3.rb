@@ -43,6 +43,7 @@
 #   - transform character to upcase if index position is odd (-> refers to 2nd character of the word)
 # - method should return string of concatenated array elements, joined together with no spaces in between.
 ## Code with Intent
+#
 
 THIRD_WORD = 3
 

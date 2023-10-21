@@ -34,8 +34,10 @@
 #   - slice a sub array of 5 consecutive elements starting from current element passed into the block and get their sum
 #   - append sum value to `output` array
 # - return the minimum value from `output`
-
+#
 ## Code with Intent
+#
+
 def minimum_sum(arr)
   return nil if arr.size < 5
 

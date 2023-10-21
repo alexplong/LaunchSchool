@@ -27,8 +27,7 @@
 #   - push count value to output array
 # - return output array
 #
-## Time: 20 min
-
+## Code with Intent
 
 def smaller_numbers_than_current(numbers)
 
@@ -49,3 +48,5 @@ p smaller_numbers_than_current([6,5,4,8]) == [2, 1, 0, 3]
 p smaller_numbers_than_current([1]) == [0]
 
 # The tests above should print "true".
+
+## Time: 20 min
