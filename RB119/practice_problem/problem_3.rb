@@ -27,31 +27,42 @@
 #
 ## Algorithm
 # - Given a string as input `str`
-# - Create a constant third_word and set to ___
-# - Iterate to create copy and return transformed string
-#   - For each word in words - check if word is the 3rd word
-#     - If true, return word thats been split and rejoined where every second character in word transformed to uppercase
+# - Create a constant third_word and set to 3 
+# - Split input string to an array of words
+# - Iterate through array of words to transform every 3rd word 
+#   - each word in words - check if word is the 3rd word
+#     - If true, pass in word and return the weird_word
 #     - else just return word
+# - Create a string of concatenated array elements, joined together with a space: ' ' between each element 
 # - Return transformed string
 #
+# weird_word helper method
+# - given a string
+# - split string into an array of characters
+# - each character in string
+#   - transform character to upcase if index position is odd (-> refers to 2nd character of the word)
+# - method should return string of concatenated array elements, joined together with no spaces in between.
 ## Code with Intent
 
 THIRD_WORD = 3
+
+def weird_word(string)
+  word = string.chars
+  word.map!.with_index do |char, idx2|
+    if idx2.odd?
+      char.upcase
+    else
+      char
+    end
+  end
+  word.join
+end
 
 def to_weird_case(str)
   weird = str.split
   weird.map!.with_index  do |word, idx|
     if (idx + 1) % THIRD_WORD == 0
-
-      weird_word = word.chars
-      weird_word.map!.with_index do |char, idx2|
-        if idx2.odd?
-          char.upcase
-        else
-          char
-        end
-      end
-      weird_word.join
+      weird_word(word)
     else
       word
     end

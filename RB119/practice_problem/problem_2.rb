@@ -28,11 +28,11 @@
 ## Algorithm
 # - if size of `arr` is less than 5 return `nil`
 # - create a variable `output` and set to empty array
-# - given an array `arr` of integer elements
+# - given an array `arr` of integers
 # - iterate through the array
-#   - slice sub array from current element to next 5 elements and get sum of these 5 elements
-#   - append sum value to `output` array
 #   - break out of loop when return value element at current position + 5 is `nil`
+#   - slice a sub array of 5 consecutive elements starting from current element passed into the block and get their sum
+#   - append sum value to `output` array
 # - return the minimum value from `output`
 
 ## Code with Intent
@@ -42,8 +42,8 @@ def minimum_sum(arr)
   output = []
 
   arr.each_index do |idx|
-    output << arr[idx, 5].sum
     break if arr[idx+5] == nil
+    output << arr[idx, 5].sum
   end
 
   output.min

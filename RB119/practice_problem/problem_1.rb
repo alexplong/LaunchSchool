@@ -12,7 +12,7 @@
 # - array with one element will return [0]
 #
 # clarifying questions?
-# - empty array returns []?
+# - empty array returns []? yes
 #
 ## Data Structures
 # - Array: input un-mutated
@@ -20,10 +20,10 @@
 # - Array: array of unique elements
 #
 ## Algorithm
-# - create a variable to store output and set to reference an empty array
-# - iterate through array: each number in numbers
-#   - create copy of array of unique elements
-#   - count number of elements in uniqued array that are less than each current number
+# - create a variable and set to an empty array to store output 
+# - iterate through input array: each number in numbers
+#   - create copy of array containing only unique elements
+#   - count number of elements in unique array that are less than each current number
 #   - push count value to output array
 # - return output array
 #
