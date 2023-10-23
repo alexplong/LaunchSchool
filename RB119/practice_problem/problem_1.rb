@@ -47,6 +47,4 @@ p smaller_numbers_than_current([7,7,7,7]) == [0,0,0,0]
 p smaller_numbers_than_current([6,5,4,8]) == [2, 1, 0, 3]
 p smaller_numbers_than_current([1]) == [0]
 
-# The tests above should print "true".
-
 ## Time: 20 min

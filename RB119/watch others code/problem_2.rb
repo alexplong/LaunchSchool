@@ -13,34 +13,35 @@ input: an array of strings
 output: an array of characters
 
 explicit/implicit requirements:
-- input strings array are only lowercase letters
+- strings in input array are only lowercase letters
 - characters returned can be duplicates
-- 3 strings and first two contain two `l` and last contains three `l`: two `l` need to be included in returned array
+  - if there are 3 strings 
+  - two strings contain two `l` and last contains three `l`, then two `l` need to be included in returned array
 - new array returned
 
 questions?
-- order of characters returned important?
+- order of characters returned important? no
 
 # Data Structure
 - Array: input array - non mutated
 - Array: output array containing characters
-- Array: dictionary hash for each string
+- Array: dictionary hash for each string, see ex. below
 
-[
-  {"b" => 1, "e" => 1, "l" => 2, "a" => 1},
-  {"l" => 2, "a" => 1, "b" => 1, "e" => 1},
-  {"r" => 2, "o" => 1, "l" => 2, "e" => 1}
-]
+    [
+      {"b" => 1, "e" => 1, "l" => 2, "a" => 1},
+      {"l" => 2, "a" => 1, "b" => 1, "e" => 1},
+      {"r" => 2, "o" => 1, "l" => 2, "e" => 1}
+    ]
 
 # Algorithm
 - Create an empty output array
 - For each string in strings
-- Create a dictionary and store each dictionary in a collection
-- For each dictionary in dictionaries
-  - Check if key in current dictionary is included in all dictionaries using helper function
-    - If true, compare values associated with key from all dictionaries
-    - Take minimum of all the values and multiply to key string
-    - Append multiplied key string to output array
+-   Create a tally of each word and store in a dictionary
+- For each word in dictionary
+  - Check if key is not in output AND is included in every hash in the dictionary
+    - If true, get all values for the key in from every hash in the dictionary
+    - Determine minimum of all those values
+    - Append key string to output array the minimum number of times
 - Return output array
 
 # tally_characters method
@@ -51,9 +52,16 @@ questions?
 - Return hash
 
 # in_every_dictionary? method
-- Given a collection containing dictionarys and element to check
+- Given a collection containing array of hash elements and key to check in every hash
 - Iterate through every dictionary and check if element passed in is a key in every dictionary
 - return true if it is otherwise return false
+
+# all_values_of_key method
+- Given an array of hashes and a hash key
+- Each hash in array
+  - Append value associated with key to array
+- Return array of values
+
 =end
 
 def tally_characters(string)
@@ -72,21 +80,32 @@ def in_every_dictionary?(dictionary, character)
   end
 end
 
+def all_values_of_key(dictionary, key)
+  dictionary.each_with_object([]) do |hsh, character_count|
+    character_count << hsh[key]
+  end
+end
+
 def common_chars(arr)
   output = []
   dictionary = []
   arr.each {|word| dictionary << tally_characters(word)}
 
   dictionary.each do |hsh|
-
     hsh.each do |key, value|
-      dictionary.select {|hsh| hsh.select {|k, v| }}
-      in_every_dictionary(dictionary, key)
-      
+
+      if !output.include?(key) && in_every_dictionary?(dictionary, key)
+        character_count = all_values_of_key(dictionary, key).min
+
+        character_count.times do
+          output << key
+        end
+
+      end
     end
 
   end
-
+  output
 end
 
 p common_chars(["bella", "label", "roller"]) == ["e", "l", "l"]
