@@ -16,7 +16,7 @@ If no bigger number can be composed using those digits, return -1:
 - output: the next bigger integer formed by same digits or -1
 
 Requirements/Questions?
-- can convert integer to string?
+- can convert integer to string? yes
 - 
 
 # Examples
@@ -32,10 +32,8 @@ Requirements/Questions?
 
 # Algorithm
 - Create an output variable and set to an empty array
-- Convert integer to string
-- Convert string to an array of string integers
-- Transform string integers in array to integers
-- Determine all permutations from array of integers to size of current array
+- Transform integer to an array to integers
+- Determine all permutations from array of integers that are the length of the size of the current array
 - Iterate through permutations
   - Join each current permutation array back to an integer
   - Add current permutation to output array if current permutation value is greater than input value
