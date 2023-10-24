@@ -32,7 +32,7 @@ Integer: output - max sum of contigoius subsequences
 Algorithm
 - Return 0 if all integers in array are less than 0 or if the array is empty
 - Initialize variable to reference the sum and set to 0
-- Each number in numbers
+- Each index position of number in numbers
   - Get a sub array from current element to the end
   - Each number in sub array (nested iteration)
     - Initialize an empty array
