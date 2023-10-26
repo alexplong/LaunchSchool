@@ -39,8 +39,16 @@ Mental Model
 
 # Algorithm
 - Given a string as input
-- Create an empty array to store all substrings
+- Create an array to store all substrings that are palindromes
 - Create an output variable and set it to 0
+- 
+- Each substring in substrings
+  - if length of substring is greater than output
+    - update output variable with length of substring 
+- return output
+
+get_all_palindromes helper method
+- Initialize an empty array to push substrings to and return
 - Initialize a counter i to 0
 - Iterate through each character in string with index i
   - Set counter j to reference length of string - 1
@@ -52,32 +60,40 @@ Mental Model
     - break out of inner loop if i >= j
   - increment i by 1
   - break out of outer loop if i == length of input
-- Each substring in substrings
-  - if length of substring is greater than output
-    - update output variable with length of substring 
-- return output
+- Return substrings array
 =end
 
-
-def longest_palindrome(str)
+def get_all_palindromes(str)
   substrings = []
-  output = 0
   i = 0
 
   loop do
+
     j = str.length - 1
 
     loop do
+
       substr = str[i..j]
       substrings << substr if substr == substr.reverse
       j -= 1
       break if i >= j
+
     end
     i += 1
     break if i == str.length
   end
 
-  substrings.each {|substr| output = substr.length if substr.length > output }
+  substrings
+end
+
+def longest_palindrome(str)
+  substrings = get_all_palindromes(str)
+  output = 0
+
+  substrings.each do |substr| 
+    output = substr.length if substr.length > output 
+  end
+
   output
 end
 
