@@ -34,7 +34,7 @@ mental model
 - Given two strings: str1 and str2 as input
 - Create a dictionary for each downcased string
 - Iterate through str2 dictionary 
-  - Check if key is in str1 dictionary and str1 value for key is greater than or equal to str2 key value
+  - Check if character key is in str1 dictionary and str1 count value for key is greater than or equal to str2 key value
   - return false if key is not found
 
 # Code with Intent

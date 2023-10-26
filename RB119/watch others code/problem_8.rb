@@ -22,7 +22,7 @@ Requirements/Questions?
 - single character returns 1
 
 Mental Model
-- Get all substrings from given string (str is a substr: "a" -> 'a' -> 1)
+- Get all substrings from given string (self also a substr: "a" -> 'a' -> 1)
 - Create a variable to store length and iterate through all substrings
 - Check if substring is the same reversed and if so check length and update the max length variable
 - return the length
@@ -31,7 +31,11 @@ Mental Model
 - all returns true
 
 # Data Structures
--
+- String: input
+- Integer: output
+- Array: collection of substrings
+- Integers: counter for outer and nested loop 
+- String: a substring
 
 # Algorithm
 - Given a string as input
@@ -41,14 +45,19 @@ Mental Model
 - Iterate through each character in string with index i
   - Set counter j to reference length of string - 1
   - Initialize a nested loop
-    - get substring from i..j and push substring to all substrings array if substring is equal to reversed substring
+    - get substring from range i..j 
+    - if substring is equal to reversed substring
+      - push substring to substrings array 
     - decrement j by 1
     - break out of inner loop if i >= j
+  - increment i by 1
   - break out of outer loop if i == length of input
-- Each substring 
-  - update output variable with length of substring if length of substring is greater than output
+- Each substring in substrings
+  - if length of substring is greater than output
+    - update output variable with length of substring 
 - return output
 =end
+
 
 def longest_palindrome(str)
   substrings = []

@@ -26,30 +26,30 @@ Mental Model
 # Data Structures
 - Strings: input
 - Booleans: output
-- 
+- Array: collection of substrings from strings
 
 # Algorithm
 - Given two strings as input
 - For each string
-  - Create an array of all substrings
+  - Get an array containing all substrings of string
 - Iterate through all substrings from first string
   - Return true if current substring is included in second substring array
-- Return false if all iterations do not lead to an early return
+- otherwise false is returned if iteration completes and no condition leads to early return
 
-get_substring method
+get_substrings method
 - Create an empty array and store it in an output variable
-- Iterate through string
+- Iterate through string with index
   - Create a pointer that points to last character in string
-  - While pointer to last character is greater than first character pointer
-    - Transform and append downcase substring from range first..last to output array
-    - Decrement last pointer by 1
+  - While pointer to last character is greater than current index
+    - Transform and append downcase substring from range (current_index..last) to output array
+    - Decrement last by 1
 - Return unique output array
 
 
 # Code with Intent!
 =end
 
-def get_substring(str)
+def get_substrings(str)
   substrings = []
 
   str.chars.each_index do |idx|
@@ -59,21 +59,18 @@ def get_substring(str)
       substrings << str[idx..last].downcase
       last -= 1
     end
-  
-  substrings.uniq
-
   end
 
-
-  substrings
+  substrings.uniq
 end
 
 def substring_test(str1, str2)
+  substrings1, substrings2 = get_substrings(str1), get_substrings(str2)
 
-  substrings1, substrings2 = get_substring(str1), get_substring(str2)
   substrings1.each do |substring|
     return true if substrings2.include?(substring)
   end
+
   false
 end
 
