@@ -24,7 +24,7 @@ Explicit/implicit requirements-
 - substring must start from beginning of input string
 
 Clarifying questions-
--
+- 
 
 Examples-
 "abcabcabc" # can be constructed with "abc" * 3
@@ -33,44 +33,53 @@ Examples-
 Data Structures-
 - Array: input
 - Boolean: output
-- Array: factors of input length
+- Array: divisors of input length
 
 Algorithm-
 - given a string as the input
-- determine factors of string length (up to half the length) and store factors in an array
-- iterate through array of factors
+- determine divisors of string length (up to half the length) and store divisors in an array
+- iterate through array of divisors
   - calculate multiple by dividing length by factor
   - obtain substring of input starting from index 0 with length of factor
   - return true if substring multiplied by multiple is equal to input
 - return false if previous loop does not early return true
 
-Determine factors helper method
+Determine divisors helper method
 - given an integer
 - Iterate through values from 1 up to integer / 2
   - if integer % iterating value leaves zero remainder, append integer to an array
 - return array of integers 
 =end
 
-def determine_factors(int)
-  factors = []
-
-  1.upto(int / 2) do |n|
-    factors << n if int % n == 0
+def determine_divisors(int)
+  (1..int/2).to_a.select do |num|
+    int % num == 0
   end
-
-  factors
 end
 
 def repeated_substring_pattern(string)
-  factors = determine_factors(string.length)
+  divisors = determine_divisors(string.length)
   
-  factors.each do |n|
+  divisors.each do |n|
     multiple = string.length / n
     return true if string.slice(0, n) * multiple == string
   end
 
   false
 end
+
+=begin
+Revisit & Refactor
+determine_divisors helper method
+- method to get all divisors? none that I could find
+- update algorithm
+  - get an array of integers from 1 up to input
+  - iterate through array to filter
+    - check if input divided by curr integer == 0
+  - return all elements that return true from prev conditional
+=end
+
+
 
 p repeated_substring_pattern("abab") == true
 p repeated_substring_pattern("aba") == false
