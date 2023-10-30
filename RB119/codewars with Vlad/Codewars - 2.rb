@@ -17,14 +17,15 @@
 # ...because there are 4 pairs: 2, 20, 6 and 2 (again)
 
 =begin
+# First Attempt
 - input: an array of integers
 - output: an integer
 
 requirements/questions?
-- count all pairs in the array\
+- count all pairs in the array
 - return the count of all integers
-- return 0 if array is empty or only has 1 value
-- there can be more than 1 pair available
+- return 0 if array is empty or only contains only one value
+- if there can be more than one pair available, count each pair only once
 
 algorithm
 - create a result variable and set to 0
@@ -61,3 +62,36 @@ p pairs([54]) == 0
 # explore possible options first before moving forward
 # take your Time
 # try things
+# check count method
+
+
+=begin
+# Code Refactor
+  
+Algorithm:
+  - initialise the local variable count_pairs to 0
+  - iterate over unique values of the input arr
+    - count the current number in the input array
+    - perform an integer division by 2
+    - increment count_pairs by the result of that division
+  - return count pairs
+=end
+
+def pairs(arr)
+
+  # More Readable Code Snippet
+  count_pairs = 0
+  arr.uniq.each { |num| count_pairs += (arr.count(num) / 2)}
+  count_pairs
+
+  # Code condensed to a single line
+  # use of sum method can be chained and iteratively sums up value returned by the block and returns it
+  # arr.uniq.sum { |num| arr.count(num) / 2 }
+end
+
+p pairs([1, 2, 5, 6, 5, 2]) == 2
+p pairs([1, 2, 2, 20, 6, 20, 2, 6, 2]) == 4
+p pairs([0, 0, 0, 0, 0, 0, 0]) == 3
+p pairs([1000, 1000]) == 1
+p pairs([]) == 0
+p pairs([54]) == 0
