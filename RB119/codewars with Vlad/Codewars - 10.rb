@@ -40,7 +40,8 @@ Mental Model
 
 Get all substrings
 - Given a string
-- Iterate through String
+- Create a counter and set to 0
+- Create a loop to iterate through String
   - Get substring that is 5 chars in length starting from current index
   - Append substring to an Array
   - Break if substring length is less than 5
@@ -73,6 +74,11 @@ def greatest_product(n)
 
 end
 
+def get_all_substrings(str)
+
+end
+
+
 p greatest_product("123834539327238239583") == 3240
 p greatest_product("395831238345393272382") == 3240
 p greatest_product("92494737828244222221111111532909999") == 5292
@@ -80,3 +86,62 @@ p greatest_product("92494737828244222221111111532909999") == 5292
 p greatest_product("02494037820244202221011110532909999") == 0
 
 ## get back to Algorithm 
+
+
+=begin
+Complete the greatestProduct method so that it'll find the greatest product of five consecutive digits in the given string of digits.
+
+For example:
+
+greatestProduct("123834539327238239583") // should return 3240
+
+The input string always has more than five digits.
+
+
+
+Input: a string of integers
+Output: integers
+
+RULES
+Explicit:
+- From a string of integers
+- Find the greatest product of five consecutive digits
+- Input string ALWAYS has > 5 digits
+Implicit:
+- 0 can be returned
+
+ALGORITHM
+- Create a result variable and set to 0
+- Create a counter and set to 0
+- Given a string of integers
+- Iterate through each character in the string with index
+  - Slice out a substring from current index with a length of 5
+  - break out of loop if substring length is < 5
+  - transform substring to an array of strings and convert each character in array to integer
+    - multiply each element in array to determine product
+    - !!! leading zeros in string are lost when converting to integer
+  - reassign result to product value if if product is greater than result
+  - Increment counter by 1
+- Return result
+
+=end
+
+def greatest_product(str)
+  result = 0
+  counter = 0
+
+  loop do
+    substr = str.slice(counter, 5)
+    break if substr.size < 5
+    product = substr.chars.map(&:to_i).reduce(&:*)
+    result = product if product > result
+    counter += 1
+  end
+  result
+end
+
+p greatest_product("123834539327238239583") == 3240
+p greatest_product("395831238345393272382") == 3240
+p greatest_product("92494737828244222221111111532909999") == 5292
+p greatest_product("92494737828244222221111111532909999") == 5292
+p greatest_product("02494037820244202221011110532909999") == 0

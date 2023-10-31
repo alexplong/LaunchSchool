@@ -51,6 +51,15 @@ questions?
   - Otherwise update value associated with key by 1
 - Return hash
 
+# tally_character refactor (without using #tally)
+- create an empty hash for output
+- given a string
+- transform string to an array of uniq string characters
+- each character in array of uniq characters
+  - count curr character in input string
+  - store character as key and count as value in output hash
+- return hash
+
 # in_every_dictionary? method
 - Given a collection containing array of hash elements and key to check in every hash
 - Iterate through every dictionary and check if element passed in is a key in every dictionary
@@ -64,13 +73,19 @@ questions?
 
 =end
 
+# def tally_characters(string)
+#   string.chars.each_with_object({}) do |char, hsh|
+#     if hsh[char] == nil
+#       hsh[char] = 1
+#     else
+#       hsh[char] += 1
+#     end
+#   end
+# end
+
 def tally_characters(string)
-  string.chars.each_with_object({}) do |char, hsh|
-    if hsh[char] == nil
-      hsh[char] = 1
-    else
-      hsh[char] += 1
-    end
+  string.chars.uniq.each_with_object({}) do |char, dict|
+    dict[char] = string.count(char)
   end
 end
 

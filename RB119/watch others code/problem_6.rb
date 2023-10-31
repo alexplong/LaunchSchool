@@ -49,19 +49,31 @@ get_substrings method
 # Code with Intent!
 =end
 
+# def get_substrings(str)
+#   substrings = []
+
+#   str.chars.each_index do |idx|
+#     last = str.size - 1
+
+#     while idx < last
+#       substrings << str[idx..last].downcase
+#       last -= 1
+#     end
+#   end
+
+#   substrings.uniq
+# end
+
 def get_substrings(str)
-  substrings = []
+  str = str.chars
 
-  str.chars.each_index do |idx|
-    last = str.size - 1
+  str.each_index.each_with_object do |idx, substrings|
+    str.permutation(idx) do |substring| 
 
-    while idx < last
-      substrings << str[idx..last].downcase
-      last -= 1
+      substrings << substring if substrings.include?(substring.join)
+
     end
   end
-
-  substrings.uniq
 end
 
 def substring_test(str1, str2)

@@ -43,7 +43,10 @@ Requirements/Questions?
 def next_bigger_num(number)
   output = []
   digits_length = number.to_s.length
-  number.to_s.chars.map(&:to_i).permutation(digits_length) do |variant| 
+
+  # number.to_s.chars.map(&:to_i).permutation(digits_length) do |variant| 
+
+  number.digits.permutation(digits_length) do |variant| 
     variant = variant.join.to_i
     output << variant if variant > number
   end
@@ -52,13 +55,42 @@ def next_bigger_num(number)
 
 end
 
+=begin
+What if permutation not available for use? What algorithm would you develop to answer this question?
 
-p next_bigger_num(9) == -1
-p next_bigger_num(12) == 21
-p next_bigger_num(513) == 531
-p next_bigger_num(2017) == 2071
-p next_bigger_num(111) == -1
-p next_bigger_num(531) == -1
-p next_bigger_num(123456789) == 123456798
+Model of Algorithm update v1 
+# similar to previous algorithm 
+# we generate all number patterns of given number 
+# but just use different methods
+- can get array of all number variants
+- filter/select only those greater than input 
+- return min of selected or -1
+
+Update v2
+- idea of method is to get the "next" bigger number
+- ideally, want to start at the end of the number. why?
+  - swapping numbers from beginning will be "higher" numbers vs those at end which are "smaller"
+  - next would be to keep the first (or left side) number the same and the rest, 'the next largest' 
+    - so sorting from the right
+
+Algorithm v2
+- Given an integer
+- Transform integer to an array of integers
+- Each integer in integers
+  - 
+
+=end
+
+
+# p next_bigger_num(9) == -1
+# p next_bigger_num(12) == 21
+# p next_bigger_num(513) == 531
+# p next_bigger_num(2017) == 2071
+# p next_bigger_num(111) == -1
+# p next_bigger_num(531) == -1
+# p next_bigger_num(123456789) == 123456798
+p next_bigger_num(54681)
+p next_bigger_num(54618)
+
 
 ## time 25 min
