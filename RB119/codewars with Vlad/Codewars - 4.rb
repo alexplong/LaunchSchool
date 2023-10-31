@@ -26,7 +26,117 @@ MENTAL MODEL
 
 DATA STRUCTURES
 - Array: `#scan` with Regexp , can use method to return an array of vowel substrings
+  - Method takes Regexp 
+  - Regexp /[aeiou]+/ where [aeiou] means a single char of: a, e, i, o, or u and + means one or more of previous mentioned set 
+
+ALGORITHM
+- Given a String as input
+- Get an Array of vowel only substrings from String input (String#scan)
+- Transform String in Array to its size
+- Return the max size from Array
+
+DATA STRUCTURES w/out String#scan
+- Array: referenced by a Constant containing vowel characters 
+- Integer: dynamic variable that count of longest vowel substring
+- Integer: counter to reference index of String
+
+ALGORITHM w/out String#scan
+- Create a Constant and set to Array of vowel strings a, e, i, o, u
+- Given a String as input
+- Create longest_vowel variable and set to 0
+- Create counter variable and set to 0
+- Create a loop
+  - break if referencing Array with counter + 1 returns nil
+  - If character in String at counter is not a vowel
+    - Increment counter by 1
+    - Go to next iteration
+  - Create a scoped variable vowel_count and set to 1
+  - Initiate a nested loop
+    - Check if character at counter + 1 is a vowel
+      - If true 
+        - Increment vowel_count by 1
+        - Increment counter by 1
+    - Else break out of loop (counter + 1 is nil)
+  - Reassign longest_vowel to vowel_count if vowel_count is greater than longest_vowel
+  - Increment counter by 1
+- Return longest_vowel
+
+ALGORITHM simplified?
+- Given a String as input
+- Transform String to an Array of characters
+- Iterate over Array with Map to transform non vowels to whitespace
+  - Check if character is a vowel
+  - Return character if true
+  - Else return whitespace " " character
+- Join Array to String and remove leading and trailing whitespace from String
+- Split transformed String by whitespace to get Array of vowel substrings
+- Transform Strings in Array to an Array of String length
+- Return max element in Array
 =end
+
+## String#scan solution
+# def solve(str)
+#   str.scan(/[aeiou]+/).map(&:size).max
+# end
+
+## Dynamic Programming solution
+# VOWELS = %w(a e i o u)
+
+# def solve(str)
+#   longest_vowel, counter = 0, 0
+  
+#   loop do
+#     break if str[counter + 1].nil?
+#     unless VOWELS.include?(str[counter])
+#       counter += 1
+#       next
+#     end
+
+#     vowel_count = 1
+    
+#     loop do
+#       if VOWELS.include?(str[counter + 1])
+#         vowel_count += 1
+#         counter += 1
+#       else
+#         break
+#       end
+#     end
+
+#     longest_vowel = vowel_count if vowel_count > longest_vowel
+#     counter += 1
+#   end
+
+#   longest_vowel
+# end
+
+
+def solve(str)
+  str.chars.map do |char|
+    if char.match?(/[aeiou]/)
+      char
+    else
+      " "
+    end
+  end
+  .join.strip.split.map(&:size).max
+end
+
+
+p solve("codewarriors") == 2
+p solve("suoidea") == 3
+p solve("iuuvgheaae") == 4
+p solve("ultrarevolutionariees") == 3
+p solve("strengthlessnesses") == 1
+p solve("cuboideonavicuare") == 2
+p solve("chrononhotonthuooaos") == 5
+p solve("iiihoovaeaaaoougjyaw") == 8
+
+
+
+
+
+
 
 
 
@@ -53,34 +163,34 @@ algorithm
 
 =end
 
-VOWELS = %w(a e i o u)
+# VOWELS = %w(a e i o u)
 
-def solve(str)
+# def solve(str)
 
-  output = 0
-  counter = 0
+#   output = 0
+#   counter = 0
 
-  loop do
-    break if counter == str.length
-    if VOWELS.include?(str[counter]) == false
-      counter += 1
-      next
-    end
+#   loop do
+#     break if counter == str.length
+#     if VOWELS.include?(str[counter]) == false
+#       counter += 1
+#       next
+#     end
 
-    temp_vowel = str[counter]
+#     temp_vowel = str[counter]
 
-    while str[counter + 1] && VOWELS.include?(str[counter + 1])
-      counter += 1
-      temp_vowel << str[counter]
-    end
+#     while str[counter + 1] && VOWELS.include?(str[counter + 1])
+#       counter += 1
+#       temp_vowel << str[counter]
+#     end
 
-    output = temp_vowel.length if temp_vowel.length > output
-    counter += 1
-  end
+#     output = temp_vowel.length if temp_vowel.length > output
+#     counter += 1
+#   end
 
-  output
+#   output
 
-end
+# end
 
 # p solve("codewarriors") == 2
 # p solve("suoidea") == 3
