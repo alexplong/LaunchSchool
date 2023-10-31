@@ -8,12 +8,10 @@
 
 # Examples
 
-# [1, 2, 5, 6, 5, 2]  -->  2
-
+[1, 2, 5, 6, 5, 2]  # -->  2
 # ...because there are 2 pairs: 2 and 5
 
-# [1, 2, 2, 20, 6, 20, 2, 6, 2]  -->  4
-
+[1, 2, 2, 20, 6, 20, 2, 6, 2]  # -->  4
 # ...because there are 4 pairs: 2, 20, 6 and 2 (again)
 
 =begin
