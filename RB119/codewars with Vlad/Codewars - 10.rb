@@ -2,19 +2,22 @@
 Complete the greatestProduct method so that it'll find the greatest product of five consecutive digits in the given string of digits.
 
 For example:
-
 greatestProduct("123834539327238239583") // should return 3240
 
 The input string always has more than five digits.
-
 Adapted from Project Euler.
 
+## PEDAC First Attempt
 # Problem
 - input: a string of integers
 - output: integer
 
-Requirements/Questions?
+RULES
+Explicit:
 - find greatest product of 5 consecutive digits in string of digits
+
+Implicit:
+- reminder that String with leading zero "09999" will convert to Integer: 9999 
 
 Mental Model
 - From the String
@@ -23,11 +26,12 @@ Mental Model
 - Update an output variable if the returned is greater than current product
 - Return product
 
-# Ex
-- all should return true
+EXAMPLES
+"12345" > 120
+"09999" > 0
 
-# Data Structures
--
+Data Structures
+- Integer: product value dynamically updated
 
 # Algorithm
 - Create an output varaible and set it to 0
@@ -38,7 +42,7 @@ Mental Model
   - Compare current product to output integer and update output if current is greater than output
 - Return output
 
-Get all substrings
+Get all substrings products
 - Given a string
 - Create a counter and set to 0
 - Create a loop to iterate through String
@@ -49,32 +53,30 @@ Get all substrings
 =end
 
 
-
+## First attempt refactored - Algorithm update required
 def greatest_product(n)
-  output = 0
+  # output = 0
 
-  substrings = []
+  products = []
 
   counter = 0
   loop do
     break if n[counter, 5].length < 5
-    substrings << n[counter, 5]
+    products << n[counter, 5].chars.map(&:to_i).reduce(&:*)
     counter += 1
   end
 
-  substrings.each do |substr|
-    product = 1
-    substr.chars.map(&:to_i).each do |n|
-      product *= n
-    end
-    output = product if product > output
-  end
+  products.max
 
-  output
+  # substrings.each do |substr|
+  #   product = 1
+  #   substr.chars.map(&:to_i).each do |n|
+  #     product *= n
+  #   end
+  #   output = product if product > output
+  # end
 
-end
-
-def get_all_substrings(str)
+  # output
 
 end
 
@@ -88,17 +90,9 @@ p greatest_product("02494037820244202221011110532909999") == 0
 ## get back to Algorithm 
 
 
+
+## Second Attempt
 =begin
-Complete the greatestProduct method so that it'll find the greatest product of five consecutive digits in the given string of digits.
-
-For example:
-
-greatestProduct("123834539327238239583") // should return 3240
-
-The input string always has more than five digits.
-
-
-
 Input: a string of integers
 Output: integers
 
@@ -126,22 +120,22 @@ ALGORITHM
 
 =end
 
-def greatest_product(str)
-  result = 0
-  counter = 0
+# def greatest_product(str)
+#   result = 0
+#   counter = 0
 
-  loop do
-    substr = str.slice(counter, 5)
-    break if substr.size < 5
-    product = substr.chars.map(&:to_i).reduce(&:*)
-    result = product if product > result
-    counter += 1
-  end
-  result
-end
+#   loop do
+#     substr = str.slice(counter, 5)
+#     break if substr.size < 5
+#     product = substr.chars.map(&:to_i).reduce(&:*)
+#     result = product if product > result
+#     counter += 1
+#   end
+#   result
+# end
 
-p greatest_product("123834539327238239583") == 3240
-p greatest_product("395831238345393272382") == 3240
-p greatest_product("92494737828244222221111111532909999") == 5292
-p greatest_product("92494737828244222221111111532909999") == 5292
-p greatest_product("02494037820244202221011110532909999") == 0
+# p greatest_product("123834539327238239583") == 3240
+# p greatest_product("395831238345393272382") == 3240
+# p greatest_product("92494737828244222221111111532909999") == 5292
+# p greatest_product("92494737828244222221111111532909999") == 5292
+# p greatest_product("02494037820244202221011110532909999") == 0
