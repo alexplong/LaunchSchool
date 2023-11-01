@@ -12,9 +12,7 @@ Input will consist of alphabet characters, both uppercase and lowercase. No spac
 Good luck!
 
 If you like this Kata, please try:
-
 Last digit symmetry
-
 Alternate capitalization
 
 =end
