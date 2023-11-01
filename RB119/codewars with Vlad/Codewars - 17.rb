@@ -1,3 +1,4 @@
+require "pry"
 =begin
 Sum of Pairs
 
@@ -71,41 +72,6 @@ ALGORITHM
 
 =end
 
-# Initial attempt on Codewars resulted in a time-out from the long list test
-# How to improve and optimize algorithm? - possible IRL scenario with very large list
-# - Nested iteration definitely causing the slog down
-#   - Technically, once second_index is reassigned the value of inner_idx
-#   - Any next pair of numbers that add up to sum, the index of second element will be greater than current
-#   - Therefore, in this conditional, after result and second_index are reassigned, can break from inner loop
-#     - Adding break condition to break out of nested iteration did not help
-
-
-## Saw a line on StackExchange and was reminded to take advantage of Ruby's built in methods
-# Instead of performing two nested iterations, try to iterate only once
-# In current interation, having first number and determining a value that is needed
-# We can scan the rest of the collection for position of this needed value
-# There's a method that returns the index of this number and we can compare this to the 
-# Current lowest index value
-
-## Refactored with only single pass iteration
-def sum_pairs(arr, n)
-  result = nil
-  second_index = arr.size + 1
-
-  arr.each_with_index do |curr_num, outer_idx|
-    needed = n - curr_num
-    next_subarr = arr[outer_idx+1...arr.size]
-
-    inner_idx = arr.index(needed) + outer_idx if next_subarr.index(needed) && next_subarr.index(needed) + outer_idx > outer_idx
-
-    if inner_idx && inner_idx < second_index
-      second_index = inner_idx
-      result = [curr_num, needed]
-    end
-    break if outer_idx >= second_index
-  end
-  result
-end
 
 ## Nested Iterative Method
 # def sum_pairs(arr, n)
@@ -124,6 +90,61 @@ end
 #   result
 # end
 
+# Initial attempt on Codewars resulted in a time-out from the long list test
+# How to improve and optimize algorithm? - possible IRL scenario with very large list
+# - Nested iteration definitely causing the slog down
+#   - Technically, once second_index is reassigned the value of inner_idx
+#   - Any next pair of numbers that add up to sum, the index of second element will be greater than current
+#   - Therefore, in this conditional, after result and second_index are reassigned, can break from inner loop
+#     - Adding break condition to break out of nested iteration did not help
+
+
+## Saw a line on StackExchange and was reminded to take advantage of Ruby's built in methods
+# Instead of performing two nested iterations, try to iterate only once
+# In current interation, having first number and determining a value that is needed
+# We can scan the rest of the collection for position of this needed value
+# There's a method that returns the index of this number and we can compare this to the 
+# Current lowest index value
+
+# [3, 5, 2, 3, 7, 6]
+#  ^        ^         # [0, 3]
+#    [5, 2, 3, 7, 6]  # in new arr 3 is at pos 2
+#           ^         # to get pos from orig arr, just add first el idx + 1
+
+## Refactored with only single pass iteration
+# - Given an array of integers and a sum value
+# - Initialize a variable result and set to nil
+# - Initialize a variable second index and set to size of input array + 1
+# - Each integer of integers with index
+#   - Get need value by subtracting current integer from sum
+#   - Get next subarr by slicing input arr from range index + 1 to -1
+#   - Get inner index of need value in next subarr
+#   - Check if inner index is not nil and inner index + (index + 1) is less than second index
+#   - If true, reassgin result to array [current number, need] and reassign second index to value of inner index
+#   - break if index is greater than or equal to second index
+#   - return result
+
+
+def sum_pairs(arr, n)
+  result = nil
+  second_index = arr.size + 1
+
+  arr.each_with_index do |curr_num, outer_idx|
+    need = n - curr_num
+    next_subarr = arr[outer_idx+1..-1]
+    inner_idx = next_subarr.index(need)
+
+    if !inner_idx.nil? && ((inner_idx + (outer_idx+1)) < second_index)
+      second_index = inner_idx + outer_idx + 1
+      result = [curr_num, need]
+    end
+
+    break if outer_idx > second_index
+  end
+  result
+end
+
+
 l1= [1, 4, 8, 7, 3, 15]
 l2= [1, -2, 3, 0, -6, 1]
 l3= [20, -13, 40]
@@ -134,14 +155,14 @@ l7= [0, 2, 0]
 l8= [5, 9, 13, -3]
 
 
-p sum_pairs(l1, 8) #== [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
-p sum_pairs(l2, -6) #== [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
-p sum_pairs(l3, -7) #== nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
-p sum_pairs(l4, 2) #== [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
-p sum_pairs(l5, 10) #== [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
-p sum_pairs(l6, 8) #== [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
-p sum_pairs(l7, 0) #== [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
-p sum_pairs(l8, 10) #== [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
+p sum_pairs(l1, 8) == [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
+p sum_pairs(l2, -6) == [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
+p sum_pairs(l3, -7) == nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
+p sum_pairs(l4, 2) == [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
+p sum_pairs(l5, 10) == [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
+p sum_pairs(l6, 8) == [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
+p sum_pairs(l7, 0) == [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
+p sum_pairs(l8, 10) == [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
 ## 23 minutes
 
 
