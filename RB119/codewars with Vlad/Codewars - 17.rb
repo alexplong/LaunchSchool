@@ -31,7 +31,126 @@ Negative numbers and duplicate numbers can and will appear.
 NOTE: There will also be lists tested of lengths upwards of 10,000,000 elements. Be sure your code doesn't time out.
 =end
 
+## Second Attempt
+=begin
+input: an array of integers and a single integer value
+output: an array containing pair of integers or nil
 
+RULES
+Explicit:
+- Parse/iterate through collection starting from left
+- Pair of integers in returned array are contained in input array and both add up to equal the sum
+- Array can contain more than 1 pair that adds up to sum
+  - Pair whose second element has the smallest index is the solution
+- If pairs of numbers can not be added to produce sum, return nil
+- Negative numbers and duplicate numbers can appear in list
+- List can contain upwards of 10,000,000 elements
+
+Implicit:
+- Pairs of numbers do not need to be contiguous
+
+MENTAL MODEL
+- Outer iterator to pass through whole array
+- Inner iterator to pass from outer iterator through to the end of the array
+
+DATA STRUCTURE
+- Integer: dynamically updated to keep track of index of second element
+- Array: output also dynamically updated conditionally
+
+ALGORITHM
+- Initialize a result variable and set to nil
+- Initialize a variable second_index and set to nil
+- Given an array of integers and a sum value
+- Outer iterater to loop through array with outer index
+  - Inner iterator to iterate from range (outer index + 1) to length of input array exclusively
+    - Check if element at outer iterator and inner iterator added together equals sum AND if second_index is nil or if inner iterator is less than curent value of second_index
+      - If that is also true
+        - Then second_index is reassigned to value of inner iterator
+        - result is reassigned to an array of [arr[outer iterator], arr[inner iterator]]
+- Return result
+
+=end
+
+# Initial attempt on Codewars resulted in a time-out from the long list test
+# How to improve and optimize algorithm? - possible IRL scenario with very large list
+# - Nested iteration definitely causing the slog down
+#   - Technically, once second_index is reassigned the value of inner_idx
+#   - Any next pair of numbers that add up to sum, the index of second element will be greater than current
+#   - Therefore, in this conditional, after result and second_index are reassigned, can break from inner loop
+#     - Adding break condition to break out of nested iteration did not help
+
+
+## Saw a line on StackExchange and was reminded to take advantage of Ruby's built in methods
+# Instead of performing two nested iterations, try to iterate only once
+# In current interation, having first number and determining a value that is needed
+# We can scan the rest of the collection for position of this needed value
+# There's a method that returns the index of this number and we can compare this to the 
+# Current lowest index value
+
+## Refactored with only single pass iteration
+def sum_pairs(arr, n)
+  result = nil
+  second_index = arr.size + 1
+
+  arr.each_with_index do |curr_num, outer_idx|
+    needed = n - curr_num
+    next_subarr = arr[outer_idx+1...arr.size]
+
+    inner_idx = arr.index(needed) + outer_idx if next_subarr.index(needed) && next_subarr.index(needed) + outer_idx > outer_idx
+
+    if inner_idx && inner_idx < second_index
+      second_index = inner_idx
+      result = [curr_num, needed]
+    end
+    break if outer_idx >= second_index
+  end
+  result
+end
+
+## Nested Iterative Method
+# def sum_pairs(arr, n)
+#   result = nil
+#   second_index = nil
+
+#   arr.each_index do |out_idx|
+#     (out_idx+1...arr.length).each do |inner_idx|
+#       if (arr[out_idx] + arr[inner_idx] == n) && (!second_index || inner_idx < second_index)
+#         second_index = inner_idx
+#         result = [arr[out_idx], arr[inner_idx]]
+#         break
+#       end
+#     end
+#   end
+#   result
+# end
+
+l1= [1, 4, 8, 7, 3, 15]
+l2= [1, -2, 3, 0, -6, 1]
+l3= [20, -13, 40]
+l4= [1, 2, 3, 4, 1, 0]
+l5= [10, 5, 2, 3, 7, 5]
+l6= [4, -2, 3, 3, 4]
+l7= [0, 2, 0]
+l8= [5, 9, 13, -3]
+
+
+p sum_pairs(l1, 8) #== [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
+p sum_pairs(l2, -6) #== [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
+p sum_pairs(l3, -7) #== nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
+p sum_pairs(l4, 2) #== [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
+p sum_pairs(l5, 10) #== [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
+p sum_pairs(l6, 8) #== [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
+p sum_pairs(l7, 0) #== [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
+p sum_pairs(l8, 10) #== [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
+## 23 minutes
+
+
+
+
+
+
+
+## First Attempt
 =begin
 input: array of integers
 output: pair of integers in an array or nil
@@ -56,47 +175,47 @@ Algorithm
 - Return array if length is 2 otherwise return nil
 =end
 
-def sum_pairs(ints, s)
+# def sum_pairs(ints, s)
   
-  output = []
-  inside_index = nil
+#   output = []
+#   inside_index = nil
   
-  ints.each_with_index do |n, i|
+#   ints.each_with_index do |n, i|
 
-    (i + 1).upto(ints.length - 1) do |j|
-      next if n + ints[j] != s
-      if inside_index == nil || j < inside_index
-        output = [n, ints[j]]
-        inside_index = j
-      end
-    end
-  end
+#     (i + 1).upto(ints.length - 1) do |j|
+#       next if n + ints[j] != s
+#       if inside_index == nil || j < inside_index
+#         output = [n, ints[j]]
+#         inside_index = j
+#       end
+#     end
+#   end
 
-  if output.length == 2 
-     output
-  else
-     nil
-  end
-end
+#   if output.length == 2 
+#      output
+#   else
+#      nil
+#   end
+# end
 
-l1= [1, 4, 8, 7, 3, 15]
-l2= [1, -2, 3, 0, -6, 1]
-l3= [20, -13, 40]
-l4= [1, 2, 3, 4, 1, 0]
-l5= [10, 5, 2, 3, 7, 5]
-l6= [4, -2, 3, 3, 4]
-l7= [0, 2, 0]
-l8= [5, 9, 13, -3]
+# l1= [1, 4, 8, 7, 3, 15]
+# l2= [1, -2, 3, 0, -6, 1]
+# l3= [20, -13, 40]
+# l4= [1, 2, 3, 4, 1, 0]
+# l5= [10, 5, 2, 3, 7, 5]
+# l6= [4, -2, 3, 3, 4]
+# l7= [0, 2, 0]
+# l8= [5, 9, 13, -3]
 
 
-p sum_pairs(l1, 8) == [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
-p sum_pairs(l2, -6) == [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
-p sum_pairs(l3, -7) == nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
-p sum_pairs(l4, 2) == [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
-p sum_pairs(l5, 10) == [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
-p sum_pairs(l6, 8) == [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
-p sum_pairs(l7, 0) == [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
-p sum_pairs(l8, 10) == [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
+# p sum_pairs(l1, 8) == [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
+# p sum_pairs(l2, -6) == [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
+# p sum_pairs(l3, -7) == nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
+# p sum_pairs(l4, 2) == [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
+# p sum_pairs(l5, 10) == [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
+# p sum_pairs(l6, 8) == [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
+# p sum_pairs(l7, 0) == [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
+# p sum_pairs(l8, 10) == [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
 
 # 24 min
 # alternative: create array of pairs first
