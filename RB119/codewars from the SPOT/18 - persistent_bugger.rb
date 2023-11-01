@@ -1,5 +1,9 @@
 =begin
-Write a function, persistence, that takes in a positive parameter num and returns its multiplicative persistence, which is the number of times you must multiply the digits in num until you reach a single digit.
+Difficulty: medium
+
+Write a function, persistence, that takes in a positive parameter num and 
+returns its multiplicative persistence, which is the number of times you 
+must multiply the digits in num until you reach a single digit.
 
 For example:
 
@@ -10,6 +14,7 @@ For example:
                   # 1*2*6=12, and finally 1*2=2
 
  persistence(4) # returns 0, because 4 is already a one-digit number
+
 =end
 
 p persistence(39) == 3

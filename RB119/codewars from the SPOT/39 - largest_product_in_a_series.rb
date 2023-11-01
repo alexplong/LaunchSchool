@@ -1,11 +1,14 @@
 =begin
-6 kyu
-Complete the greatestProduct method so that it'll find the greatest product of five consecutive digits in the given string of digits.
+Difficulty: hard
+
+Complete the greatestProduct method so that it'll find the greatest product of 
+five consecutive digits in the given string of digits.
 
 For example:
 
 greatestProduct("123834539327238239583") // should return 3240
 The input string always has more than five digits.
+
 =end
 p greatest_product("123834539327238239583") == 3240
 p greatest_product("395831238345393272382") == 3240
