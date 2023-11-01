@@ -94,10 +94,10 @@ end
 
 def is_prime?(sum)
 
-  counter = 3
+  counter = 2
   loop do
     return false if sum % counter == 0 && counter != sum
-    counter += 2
+    counter += 1
     break if counter >= sum - 1
   end
   true
