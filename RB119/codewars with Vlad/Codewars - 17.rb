@@ -125,44 +125,44 @@ ALGORITHM
 #   - return result
 
 
-def sum_pairs(arr, n)
-  result = nil
-  second_index = arr.size + 1
+# def sum_pairs(arr, n)
+#   result = nil
+#   second_index = arr.size + 1
 
-  arr.each_with_index do |curr_num, outer_idx|
-    need = n - curr_num
-    next_subarr = arr[outer_idx+1..-1]
-    inner_idx = next_subarr.index(need)
+#   arr.each_with_index do |curr_num, outer_idx|
+#     need = n - curr_num
+#     next_subarr = arr[outer_idx+1..-1]  # limiting factor
+#     inner_idx = next_subarr.index(need)
 
-    if !inner_idx.nil? && ((inner_idx + (outer_idx+1)) < second_index)
-      second_index = inner_idx + outer_idx + 1
-      result = [curr_num, need]
-    end
+#     if !inner_idx.nil? && ((inner_idx + (outer_idx+1)) < second_index)
+#       second_index = inner_idx + outer_idx + 1
+#       result = [curr_num, need]
+#     end
 
-    break if outer_idx > second_index
-  end
-  result
-end
-
-
-l1= [1, 4, 8, 7, 3, 15]
-l2= [1, -2, 3, 0, -6, 1]
-l3= [20, -13, 40]
-l4= [1, 2, 3, 4, 1, 0]
-l5= [10, 5, 2, 3, 7, 5]
-l6= [4, -2, 3, 3, 4]
-l7= [0, 2, 0]
-l8= [5, 9, 13, -3]
+#     break if outer_idx > second_index
+#   end
+#   result
+# end
 
 
-p sum_pairs(l1, 8) == [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
-p sum_pairs(l2, -6) == [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
-p sum_pairs(l3, -7) == nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
-p sum_pairs(l4, 2) == [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
-p sum_pairs(l5, 10) == [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
-p sum_pairs(l6, 8) == [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
-p sum_pairs(l7, 0) == [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
-p sum_pairs(l8, 10) == [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
+# l1= [1, 4, 8, 7, 3, 15]
+# l2= [1, -2, 3, 0, -6, 1]
+# l3= [20, -13, 40]
+# l4= [1, 2, 3, 4, 1, 0]
+# l5= [10, 5, 2, 3, 7, 5]
+# l6= [4, -2, 3, 3, 4]
+# l7= [0, 2, 0]
+# l8= [5, 9, 13, -3]
+
+
+# p sum_pairs(l1, 8) == [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
+# p sum_pairs(l2, -6) == [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
+# p sum_pairs(l3, -7) == nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
+# p sum_pairs(l4, 2) == [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
+# p sum_pairs(l5, 10) == [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
+# p sum_pairs(l6, 8) == [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
+# p sum_pairs(l7, 0) == [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
+# p sum_pairs(l8, 10) == [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
 ## 23 minutes
 
 
@@ -240,3 +240,128 @@ Algorithm
 
 # 24 min
 # alternative: create array of pairs first
+
+
+
+
+
+
+
+
+# def sum_pairs(arr, target)
+
+#   pair = []
+#   lowest_second_index = arr.size
+
+#   arr.each_with_index do |num, idx|
+
+#     break if idx >= lowest_second_index
+
+#     need = target - num
+#     next_subarr = arr.slice(idx+1...arr.size) # how to overcome creating a subarr on each iteration
+#     index_of_need = next_subarr.index(need)
+    
+#     next if index_of_need.nil?
+
+#     if (index_of_need + idx+1) < lowest_second_index
+#       pair = [num, need]
+#       lowest_second_index = index_of_need + idx+1
+#     end
+#   end
+
+#   pair.size == 2 ? pair : nil
+# end
+
+=begin
+- Given an array
+- Shift out first element and store in a stack
+- Get value needed by target - stack.last\
+  - Find index of needed value in array
+  - Next if index of needed is nil
+  - Add length of stack to index and check if lower than lowest_second_index value
+    - If true, assign stack and needed to pair array
+    - Update lowest_second_index value with index of needed + size of stack
+- Return pair if length is 2 otherweise return nil
+=end
+
+
+
+# def sum_pairs(arr, n)
+#   pair = []
+#   stack_count = 0
+#   prev_value = nil
+#   lowest_second_index = arr.size
+  
+#   while stack_count <= arr.size
+#     prev_value = arr.shift  
+#     stack_count += 1
+#     need = n - prev_value
+    
+#     index_of_need = arr.index(need)
+#     next if index_of_need.nil?
+    
+#     if (index_of_need + stack_count) < lowest_second_index
+#       pair = [prev_value, need]
+#       lowest_second_index = (index_of_need + stack_count)
+#     end
+#   end
+
+#   pair.size == 2 ? pair : nil
+# end
+
+
+
+
+# how to overcome slice
+# once we iterate through we don't care anymore 
+# fill that element in so that looking for index can still use same array
+
+def sum_pairs(arr, target)
+  arr = arr.dup
+  pair = []
+  lowest_second_index = arr.size
+
+  arr.each_with_index do |num, idx|
+
+    break if idx >= lowest_second_index
+  index_of_need 
+
+    first = num.dup
+
+    need = target - first
+    arr[idx] = nil
+    index_of_need = arr.index(need)
+    next if index_of_need.nil?
+
+    if (index_of_need) < lowest_second_index
+      pair = [first, need]
+      lowest_second_index = index_of_need
+    end
+  end
+
+  pair.size == 2 ? pair : nil
+end
+
+
+
+l1= [1, 4, 8, 7, 3, 15]
+l2= [1, -2, 3, 0, -6, 1]
+l3= [20, -13, 40]
+l4= [1, 2, 3, 4, 1, 0]
+l5= [10, 5, 2, 3, 7, 5]
+l6= [4, -2, 3, 3, 4]
+l7= [0, 2, 0]
+l8= [5, 9, 13, -3]
+test_list = [1] * 9_999_998 + [4,6] #with target value s = 10
+
+
+p sum_pairs(l1, 8) #== [1, 7]    #, "Basic: ["+l1.join(", ")+"] should return [1, 7] for sum = 8")
+p sum_pairs(l2, -6) #== [0, -6]  #, "Negatives: ["+l2.join(", ")+"] should return [0, -6] for sum = -6")
+p sum_pairs(l3, -7) #== nil      #, "No Match: ["+l3.join(", ")+"] should return nil for sum = -7")
+p sum_pairs(l4, 2) #== [1, 1]    #, "First Match From Left: ["+l4.join(", ")+"] should return [1, 1] for sum = 2 ")
+p sum_pairs(l5, 10) #== [3, 7]   #, "First Match From Left REDUX!: ["+l5.join(", ")+"] should return [3, 7] for sum = 10 ")
+p sum_pairs(l6, 8) #== [4, 4]    #, "Duplicates: ["+l6.join(", ")+"] should return [4, 4] for sum = 8")
+p sum_pairs(l7, 0) #== [0, 0]    #, "Zeroes: ["+l7.join(", ")+"] should return [0, 0] for sum = 0")
+p sum_pairs(l8, 10) #== [13, -3] #, "Subtraction: ["+l8.join(", ")+"] should return [13, -3] for sum = 10")
+p sum_pairs([0, -6, 1], -6)
+p sum_pairs(test_list, 10)

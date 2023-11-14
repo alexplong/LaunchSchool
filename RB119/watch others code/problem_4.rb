@@ -75,3 +75,65 @@ p max_sequence([-32]) == 0
 p max_sequence([-2, 1, -7, 4, -10, 2, 1, 5, 4]) #== 12
 
 ## time 30 +
+
+=begin
+input: an array of integers
+output: an integer
+
+Rules
+Explicit:
+- find maximum sum of a contiguous subsequence
+- if all numbers are positive, max sum will be sum of whole array
+- return 0 if array is empty OR array consists of only negatives 
+
+Implicit:
+- subsequence can be of any size, just get max sum from it
+
+MENTAL MODEL
+- Outer iterator keeps track of first element of subarr
+- Inner iterator keeps track of last element to slice out to create subarr
+
+DATA STRUCTURE
+- 1 Array: input
+- 1 Integer: output - dynamic variable we update
+
+ALGORITHM
+- return arr.sum if size of input arr is 1
+- Initailize an output variable and set to 0
+- Given an array of integers
+- Iterate through input array with index - start_idx
+  - Nested iteration from start_idx to length of input arr - 1 - end_indx
+    - Get subarr from range start_idx to end_index inclusive
+    - Reduce to get sum of array
+    - Reassign output to reduced sum if reduced sum is greater than output
+- Return output
+=end
+
+def max_sequence(arr)
+  output = 0
+
+  arr.each_index do |start_idx|
+    (start_idx...arr.size).each do |end_idx|
+      curr_sum = arr.slice(start_idx..end_idx).reduce(:+)
+      output = curr_sum if curr_sum > output
+    end
+  end
+  
+  output
+end
+
+# find the max pair of contigious sequences
+def max_pair(arr)
+  output = nil
+  max = 0 
+  arr.each_index do |start_idx|
+    output, max = [[arr[start_idx], arr[start_idx+1]], arr.slice(start_idx, 2).sum] if arr.slice(start_idx, 2).sum > max && arr.slice(start_idx, 2).size > 1
+  end
+  output
+end
+
+p max_pair([]) == 0
+p max_pair([-2, 1, -3, 4, -1, 2, 1, -5, 4]) #== 6
+p max_pair([11]) #== 11
+p max_pair([32, 7]) #== 0
+p max_pair([-2, 1, -7, 4, -10, 2, 1, 5, 4]) #== 12

@@ -29,16 +29,24 @@
 #
 ## Code with Intent
 
+# def smaller_numbers_than_current(numbers)
+
+#   numbers_smaller = []
+  
+#   numbers.each do |number|
+#     numbers_smaller << numbers.uniq.count {|n| n < number}
+#   end
+
+#   numbers_smaller
+# end
+
 def smaller_numbers_than_current(numbers)
 
-  numbers_smaller = []
-  
-  numbers.each do |number|
-    numbers_smaller << numbers.uniq.count {|n| n < number}
+  numbers.map do |num|
+    numbers.uniq.select { |n| n < num }.size
   end
-
-  numbers_smaller
 end
+
 
 # Examples:
 p smaller_numbers_than_current([8,1,2,2,3]) == [3, 0, 1, 1, 2]

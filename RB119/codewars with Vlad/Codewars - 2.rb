@@ -37,15 +37,22 @@ algorithm
 
 =end
 
+# def pairs(arr)
+#   result = 0
+#   uniq_arr = arr.uniq
+
+#   uniq_arr.each do |n|
+#     result += (arr.count(n) / 2)
+#   end
+
+#   result
+# end
+
 def pairs(arr)
-  result = 0
-  uniq_arr = arr.uniq
+  arr.uniq.map do |num|
+    arr.count(num) / 2
+  end.sum
 
-  uniq_arr.each do |n|
-    result += (arr.count(n) / 2)
-  end
-
-  result
 end
 
 
@@ -75,21 +82,21 @@ Algorithm:
   - return count pairs
 =end
 
-def pairs(arr)
+# def pairs(arr)
 
-  # More Readable Code Snippet
-  count_pairs = 0
-  arr.uniq.each { |num| count_pairs += (arr.count(num) / 2)}
-  count_pairs
+#   # More Readable Code Snippet
+#   count_pairs = 0
+#   arr.uniq.each { |num| count_pairs += (arr.count(num) / 2)}
+#   count_pairs
 
-  # Code condensed to a single line
-  # use of sum method can be chained and iteratively sums up value returned by the block and returns it
-  # arr.uniq.sum { |num| arr.count(num) / 2 }
-end
+#   # Code condensed to a single line
+#   # use of sum method can be chained and iteratively sums up value returned by the block and returns it
+#   # arr.uniq.sum { |num| arr.count(num) / 2 }
+# end
 
-p pairs([1, 2, 5, 6, 5, 2]) == 2
-p pairs([1, 2, 2, 20, 6, 20, 2, 6, 2]) == 4
-p pairs([0, 0, 0, 0, 0, 0, 0]) == 3
-p pairs([1000, 1000]) == 1
-p pairs([]) == 0
-p pairs([54]) == 0
+# p pairs([1, 2, 5, 6, 5, 2]) == 2
+# p pairs([1, 2, 2, 20, 6, 20, 2, 6, 2]) == 4
+# p pairs([0, 0, 0, 0, 0, 0, 0]) == 3
+# p pairs([1000, 1000]) == 1
+# p pairs([]) == 0
+# p pairs([54]) == 0

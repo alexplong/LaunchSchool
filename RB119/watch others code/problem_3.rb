@@ -40,20 +40,20 @@ Requirements/Questions?
 - Return the minimum value from the input array if available if truthy otherwise return -1
 =end
 
-def next_bigger_num(number)
-  output = []
-  digits_length = number.to_s.length
+# def next_bigger_num(number)
+#   output = []
+#   digits_length = number.to_s.length
 
-  # number.to_s.chars.map(&:to_i).permutation(digits_length) do |variant| 
+#   # number.to_s.chars.map(&:to_i).permutation(digits_length) do |variant| 
 
-  number.digits.permutation(digits_length) do |variant| 
-    variant = variant.join.to_i
-    output << variant if variant > number
-  end
+#   number.digits.permutation(digits_length) do |variant| 
+#     variant = variant.join.to_i
+#     output << variant if variant > number
+#   end
 
-  output.min || -1
+#   output.min || -1
 
-end
+# end
 
 =begin
 What if permutation not available for use? What algorithm would you develop to answer this question?
@@ -79,18 +79,51 @@ Algorithm v2
 - Each integer in integers
   - 
 
+EXAMPLES after watching video
+54681 => largest number "out of bounds" of given is 100000
+51682 => increment by 1 up to out of bounds number previously mentioned
+  ... => and check if digits sorted equal to sorted given input
+
+DATA STRUCTURE after watching video
+- 1 Integer: input
+- 1 Integer: output
+- 1 Integer: largest "out of bounds" value of given input
+- 2 Arrays: Array of Integers from next num and given num
+
+ALGORITHM after watching video
+- Given an Integer as input
+- Initialize next num variable and set to given Integer input + 1
+- Initialize max num variable and set to the largest "out of bounds" number from given Integer
+- While next num is less than max num
+  - Get digits Array from next num and sort it
+  - Get digits Array from input and sort it
+  - If next num Array is equal to given input Array return next num
+  - Increment next num by 1
+- Return -1
 =end
 
+def next_bigger_num(int)
+  next_num = int + 1
+  max_num = int.digits.sort.reverse.join.to_i + 1
 
-# p next_bigger_num(9) == -1
-# p next_bigger_num(12) == 21
-# p next_bigger_num(513) == 531
-# p next_bigger_num(2017) == 2071
-# p next_bigger_num(111) == -1
-# p next_bigger_num(531) == -1
-# p next_bigger_num(123456789) == 123456798
+  while next_num < max_num
+    return next_num if next_num.digits.sort == int.digits.sort
+
+    next_num += 1
+  end
+
+  -1
+end
+
+
+p next_bigger_num(9) == -1
+p next_bigger_num(12) == 21
+p next_bigger_num(513) == 531
+p next_bigger_num(2017) == 2071
+p next_bigger_num(111) == -1
+p next_bigger_num(531) == -1
+p next_bigger_num(123456789) == 123456798
 p next_bigger_num(54681)
 p next_bigger_num(54618)
-
 
 ## time 25 min

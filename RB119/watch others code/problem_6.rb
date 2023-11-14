@@ -49,40 +49,76 @@ get_substrings method
 # Code with Intent!
 =end
 
-# def get_substrings(str)
-#   substrings = []
-
-#   str.chars.each_index do |idx|
-#     last = str.size - 1
-
-#     while idx < last
-#       substrings << str[idx..last].downcase
-#       last -= 1
-#     end
-#   end
-
-#   substrings.uniq
-# end
-
 def get_substrings(str)
-  str = str.chars
+  substrings = []
 
-  str.each_index.each_with_object do |idx, substrings|
-    str.permutation(idx) do |substring| 
+  str.chars.each_index do |idx|
+    last = str.size - 1
 
-      substrings << substring if substrings.include?(substring.join)
-
+    while idx < last
+      substrings << str[idx..last].downcase
+      last -= 1
     end
   end
+
+  substrings.uniq
 end
 
+# def get_substrings(str)
+#   str = str.chars
+
+#   str.each_index.each_with_object([]) do |idx, substrings|
+#     str.permutation(idx) do |substring| 
+
+#       substrings << substring if substrings.include?(substring.join)
+
+#     end
+#   end
+# end
+
+# def substring_test(str1, str2)
+#   substrings1, substrings2 = get_substrings(str1), get_substrings(str2)
+
+#   substrings1.each do |substring|
+#     return true if substrings2.include?(substring)
+#   end
+
+#   false
+# end
+
+# p substring_test('Something', 'Fun') == false
+# p substring_test('Something', 'Home') == true
+# p substring_test('Something', '') == false
+# p substring_test('', 'Something') == false
+# p substring_test('BANANA', 'banana') #== true
+# p substring_test('test', '111t') == false
+# p substring_test('', '') == false
+# p substring_test('1234567', '541265') == true
+# p substring_test('supercalifragilisticexpialidocious', 'SoundofItIsAtrociou') == true
+
+## time 30+
+
+
+
+# RULES
+#   - substring at least two chars long
+
+
+# ALGORITHM
+# - Iterate through array of chars of str1 with index
+#   - Nested iteration through array of chars of str2 with index
+#   - Return true if chars1 and chars2 are equal and if char of str1 at idx1+1 is equal to char of str2 at idx2+1
+# - False here if there is no early return
+
+
 def substring_test(str1, str2)
-  substrings1, substrings2 = get_substrings(str1), get_substrings(str2)
+  str1_chars, str2_chars = [str1.downcase.chars, str2.downcase.chars]
 
-  substrings1.each do |substring|
-    return true if substrings2.include?(substring)
+  str1_chars.each_with_index do |char1, idx1|
+    str2_chars.each_with_index do |char2, idx2|
+      return true if (char1 == char2) && (!str1_chars[idx1+1].nil? || !str2_chars[idx2+1].nil?) && (str1_chars[idx1+1] == str2_chars[idx2+1])  
+    end
   end
-
   false
 end
 
@@ -95,5 +131,3 @@ p substring_test('test', '111t') == false
 p substring_test('', '') == false
 p substring_test('1234567', '541265') == true
 p substring_test('supercalifragilisticexpialidocious', 'SoundofItIsAtrociou') == true
-
-## time 30+

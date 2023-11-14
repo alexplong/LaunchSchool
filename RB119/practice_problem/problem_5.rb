@@ -47,28 +47,37 @@
 ## Code with Intent
 #
 
-def least_common_char(string)
-  dictionary = {}
-  output = nil
-  lowest_count = nil
+# def least_common_char(string)
+#   dictionary = {}
+#   output = nil
+#   lowest_count = nil
 
-  string.chars.each do |char|
-    char.downcase!
-    if dictionary[char]
-      dictionary[char] += 1
-    else
-      dictionary[char] = 1
-    end
-  end
+#   string.chars.each do |char|
+#     char.downcase!
+#     if dictionary[char]
+#       dictionary[char] += 1
+#     else
+#       dictionary[char] = 1
+#     end
+#   end
 
-  dictionary.each do |char, count|
-    if lowest_count == nil || count < lowest_count 
-      lowest_count = count
-      output = char
-    end
-  end
+#   dictionary.each do |char, count|
+#     if lowest_count == nil || count < lowest_count 
+#       lowest_count = count
+#       output = char
+#     end
+#   end
 
-  output
+#   output
+# end
+
+def least_common_char(str)
+  str_count = str.chars.map do |char|
+              [char.downcase, str.downcase.count(char)]
+            end
+
+  str_count = str_count.to_h
+  str_count.key(str_count.values.min)
 end
 
 p least_common_char("Hello World") #== "h"

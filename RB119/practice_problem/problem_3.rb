@@ -45,31 +45,55 @@
 ## Code with Intent
 #
 
-THIRD_WORD = 3
+# THIRD_WORD = 3
 
-def weird_word(string)
-  word = string.chars
-  word.map!.with_index do |char, idx2|
-    if idx2.odd?
+# def weird_word(string)
+#   word = string.chars
+#   word.map!.with_index do |char, idx2|
+#     if idx2.odd?
+#       char.upcase
+#     else
+#       char
+#     end
+#   end
+#   word.join
+# end
+
+# def to_weird_case(str)
+#   weird = str.split
+#   weird.map!.with_index  do |word, idx|
+#     if (idx + 1) % THIRD_WORD == 0
+#       weird_word(word)
+#     else
+#       word
+#     end
+#   end
+#   weird.join(' ')
+# end
+
+def make_word_weird(word)
+  word.chars.map.with_index do |char, idx|
+    if (idx + 1).even?
       char.upcase
     else
       char
     end
-  end
-  word.join
+  end.join('')
+
 end
 
+
 def to_weird_case(str)
-  weird = str.split
-  weird.map!.with_index  do |word, idx|
-    if (idx + 1) % THIRD_WORD == 0
-      weird_word(word)
+  str.split.map.with_index do |word, idx|
+    if (idx + 1) % 3 == 0
+      make_word_weird(word) # returns string
     else
       word
     end
-  end
-  weird.join(' ')
+  end.join(' ')
 end
+
+
 
 p to_weird_case('Lorem Ipsum is simply dummy text of the printing') ==
                 'Lorem Ipsum iS simply dummy tExT of the pRiNtInG'

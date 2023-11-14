@@ -52,13 +52,13 @@ Mental Model
 
 def find_even_index(arr)
   arr.each_index do |i|
-    if i == 0 || i == arr.length - 1
-      left = 0
-      right = arr.sum - arr[i]
-    else
-      left = arr[0..i-1].sum
-      right = arr[i+1..arr.length].sum
-    end
+    # if i == 0 || i == arr.length - 1
+    #   left = 0
+    #   right = arr.sum - arr[i]
+    # else
+      left = arr[...i].sum
+      right = arr[i+1...arr.length].sum
+    # end
     return i if left == right
   end
   -1 

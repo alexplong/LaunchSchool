@@ -38,19 +38,31 @@
 ## Code with Intent
 #
 
+# def minimum_sum(arr)
+#   return nil if arr.size < 5
+
+#   output = []
+
+#   arr.each_index do |idx|
+#     break if arr[idx+5] == nil
+#     output << arr[idx, 5].sum
+#   end
+
+#   output.min
+
+# end
+
 def minimum_sum(arr)
   return nil if arr.size < 5
 
-  output = []
-
-  arr.each_index do |idx|
-    break if arr[idx+5] == nil
-    output << arr[idx, 5].sum
+  arr.map.with_index do |_, idx|
+    subarr = arr.slice(idx, 5)
+    subarr.size < 5 ? nil : subarr.sum
   end
-
-  output.min
+  .compact.min
 
 end
+
 
 p minimum_sum([1, 2, 3, 4]) #== nil
 p minimum_sum([1, 2, 3, 4, 5, 6]) #== 15

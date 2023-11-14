@@ -11,24 +11,19 @@ Input: "aba"
 Output: False
 =end
 
-
 =begin
 Problem-
 - input: a string
 - output: a Boolean
 
-Explicit/implicit requirements-
+Explicit/implicit requirements
 - input is non-empty
 - lowercase letters only
 - substring length is a multiple of input string length
 - substring must start from beginning of input string
 
-Clarifying questions-
-- 
-
 Examples-
 "abcabcabc" # can be constructed with "abc" * 3
-
 
 Data Structures-
 - Array: input
@@ -58,7 +53,9 @@ def determine_divisors(int)
 end
 
 def repeated_substring_pattern(string)
-  divisors = determine_divisors(string.length)
+  # with long input string, this helper function can be beneficial
+  # otherwise iterating up to half the input string length will be sufficient
+  divisors = determine_divisors(string.length)  
   
   divisors.each do |n|
     multiple = string.length / n
@@ -67,19 +64,6 @@ def repeated_substring_pattern(string)
 
   false
 end
-
-=begin
-Revisit & Refactor
-determine_divisors helper method
-- method to get all divisors? none that I could find
-- update algorithm
-  - get an array of integers from 1 up to input
-  - iterate through array to filter
-    - check if input divided by curr integer == 0
-  - return all elements that return true from prev conditional
-=end
-
-
 
 p repeated_substring_pattern("abab") == true
 p repeated_substring_pattern("aba") == false

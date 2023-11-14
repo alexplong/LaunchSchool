@@ -35,19 +35,29 @@ Requirements or Clarifying Questions?
 - Return output 
 =end
 
-def common_prefix(arr)
+# def common_prefix(arr)
 
-  arr.each_with_object("") do |string, output|
+#   arr.each_with_object("") do |string, output|
     
-    string.chars.each_with_index do |char, index|
-      if arr.all? {|str| str[index] == char}
-        output << char 
-      else
-        break 
-      end
-    end
-    break output
-  end
+#     string.chars.each_with_index do |char, index|
+#       if arr.all? {|str| str[index] == char}
+#         output << char 
+#       else
+#         break 
+#       end
+#     end
+#     break output
+#   end
+# end
+
+def common_prefix(arr)
+  arr = arr.map(&:dup)
+  first_word = arr.first.chars
+
+  first_word.select.with_index do |char, idx|
+    arr.all? { |word| word[idx] == char}
+  end.join
+
 end
 
 
@@ -58,3 +68,73 @@ p common_prefix(["throne", "dungeon"]) == ""
 p common_prefix(["throne", "throne"]) == "throne"
 
 ## time 18 min
+
+
+=begin
+Input: an array of strings
+Output: a string 
+
+RULES
+Explicit:
+- find longest common PREFIX amonst strings in an array
+- return empty string if no common prefix
+- strings are made up of lowercase chars
+Implicit:
+-
+
+
+MENTAL MODEL - Selection
+- keep track of counter that refers to index of all strings in array
+- for each char in 1st string check all others strings for same chars
+  - push to output variable if all strings have the char
+
+DATA STRUCTURE
+- 1 Array: input
+- 1 String: output
+
+ALGORITHM
+- Initialize a output var and set to empty string
+- Initialize a counter and set to 0
+- Given an input array
+- Create a simple loop
+  - break if counter greater or equal to length 1st string in arr
+  - Get curr char in 1st word
+  - If in all strings, the index position counter in each string are the same char
+    - Append this char to output string if true
+    - Increment counter by 1
+  - else break if in all strings there are some characters that do not match
+- Return output
+
+=end
+
+# def common_prefix(arr)
+#   output = ""
+
+#   counter = 0
+
+#   loop do
+#     break if counter >= arr[0].size
+#     curr_char = arr[0][counter]
+#     if arr.all? { |word| word[counter] == curr_char}
+#       output << curr_char 
+#       counter += 1
+#     else
+#       break
+#     end
+
+#   end
+#   output 
+# end
+
+
+# def common_prefix(arr)
+
+#   arr[0].chars.select.with_index do |curr_char, idx|
+    
+#     arr.all? { |word| word[idx] == curr_char }
+
+#   end.join
+
+# end
+
+## nested iteration with selection

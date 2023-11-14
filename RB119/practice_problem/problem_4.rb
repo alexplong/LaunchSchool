@@ -43,30 +43,46 @@
 ## Code with Intent
 #
 
-def closest_numbers(numbers)
+# def closest_numbers(numbers)
 
-  closest_pairs = []
-  difference = nil
+#   closest_pairs = []
+#   difference = nil
 
-  numbers.each_with_index do |number, index|
+#   numbers.each_with_index do |number, index|
     
-    counter = index + 1
-    loop do 
-      break if counter > numbers.length - 1
-      curr_difference = (number - numbers[counter]).abs
-      if difference == nil || curr_difference < difference
-        difference = curr_difference
-        closest_pairs = [number, numbers[counter]]
-      end
-      counter += 1
+#     counter = index + 1
+#     loop do 
+#       break if counter > numbers.length - 1
+#       curr_difference = (number - numbers[counter]).abs
+#       if difference == nil || curr_difference < difference
+#         difference = curr_difference
+#         closest_pairs = [number, numbers[counter]]
+#       end
+#       counter += 1
+#     end
+#   end
+#   closest_pairs
+# end
+
+# [abs difference, [val1, val2]]
+
+def closest_numbers(arr)
+  storage = []
+  arr.each_with_index do |num1, idx1|
+    ((idx1 + 1)...arr.size).each do |idx2|
+      num2 = arr[idx2]
+      storage << [(num1-num2).abs, [num1, num2]]
     end
   end
-  closest_pairs
+  storage = storage.to_h
+  storage[storage.keys.min]
 end
 
-p closest_numbers([5, 25, 15, 11, 20]) == [15, 11]
-p closest_numbers([19, 25, 32, 4, 27, 16]) == [25, 27]
-p closest_numbers([12, 7, 17]) == [12, 7]
+
+
+p closest_numbers([5, 25, 15, 11, 20]) #== [15, 11]
+p closest_numbers([19, 25, 32, 4, 27, 16]) #== [25, 27]
+p closest_numbers([12, 7, 17]) #== [12, 7]
 
 
 ## time 25 min
