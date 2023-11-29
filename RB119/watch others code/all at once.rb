@@ -48,15 +48,15 @@ ALGORITHM
 - Return false
 =end
 
-# def repeated_substring_pattern(str)
-#   str.chars.each_index do |idx|
-#     break if idx == str.size / 2
-#     substr = str.slice(0..idx)
-#     multiple = str.size / substr.size
-#     return true if substr * multiple == str
-#   end
-#   false
-# end
+def repeated_substring_pattern(str)
+  str.chars.each_index do |idx|
+    break if idx == str.size / 2
+    substr = str.slice(0..idx)
+    multiple = str.size / substr.size
+    return true if substr * multiple == str
+  end
+  false
+end
 
 # p repeated_substring_pattern("abab") == true
 # p repeated_substring_pattern("aba") == false
@@ -122,32 +122,41 @@ ALGORITHM
 
 =end
 
+# def common_chars(arr)
+#   output = []
+#   first_word = arr.first.chars.uniq
+
+#   first_word.each do |char|
+#     key_values = []
+
+#     all_true = arr.all? do |word| 
+#                  key_values << word.count(char)
+#                  word.include?(char) 
+#                end
+
+#     if all_true
+#       k = key_values.min
+#       k.times { |_| output << char }
+#     end
+#   end
+
+#   output
+
+# end
+
 def common_chars(arr)
-  output = []
-  first_word = arr.first.chars.uniq
+  first_word = arr.shift.chars
 
-  first_word.each do |char|
-    key_values = []
+  first_word.select do |char|
 
-    all_true = arr.all? do |word| 
-                 key_values << word.count(char)
-                 word.include?(char) 
-               end
-
-    if all_true
-      k = key_values.min
-      k.times { |_| output << char }
-    end
   end
-
-  output
 
 end
 
-p common_chars(["bella", "label", "roller"]) == ["e", "l", "l"]
-p common_chars(["cool", "lock", "cook"]) == ["c", "o"]
-p common_chars(["hello", "goodbye", "booya", "random"]) == ["o"]
-p common_chars(["aabbaaaa", "ccdddddd", "eeffee", "ggrrrrr", "yyyzzz"]) == []
+# p common_chars(["bella", "label", "roller"]) == ["e", "l", "l"]
+# p common_chars(["cool", "lock", "cook"]) == ["c", "o"]
+# p common_chars(["hello", "goodbye", "booya", "random"]) == ["o"]
+# p common_chars(["aabbaaaa", "ccdddddd", "eeffee", "ggrrrrr", "yyyzzz"]) == []
 # 40 min
 
 
@@ -165,6 +174,15 @@ If no bigger number can be composed using those digits, return -1:
 531 ==2 -1
 =end
 
+def next_bigger_num(num)
+  max_num = num.digits.sort.reverse.join.to_i + 1
+
+  (num+1..max_num).each do |next_num|
+    return next_num if next_num.digits.sort == num.digits.sort
+  end
+
+  -1
+end
 
 # p next_bigger_num(9) == -1
 # p next_bigger_num(12) == 21
@@ -194,6 +212,20 @@ Empty array is considered to have zero greatest sum, Note that the empty array
 is also a valid subarray.
 =end
 
+def max_sequence(arr)
+  return 0 if arr.empty? || arr.all? {|num| num < 0}
+
+  contiguous_sums = []
+
+  (0...arr.size).each do |start_idx|
+    (start_idx...arr.size). each do |end_idx|
+      contiguous_sums << arr[start_idx..end_idx].sum
+    end
+  end
+  
+  contiguous_sums.max
+end
+
 
 # p max_sequence([]) == 0
 # p max_sequence([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6
@@ -218,6 +250,14 @@ Explanation: There is no common prefix among the input strings.
 Note: All given inputs are in lowercase letters a-z.
 =end
 
+def common_prefix(arr)
+  first = arr.shift.chars
+
+  first.select.with_index do |char, idx|
+    arr.all? { |word| char == word[idx]}
+  end.join
+
+end
 
 # p common_prefix(["flower", "flow", "flight"]) == "fl"
 # p common_prefix(["dog", "racecar", "car"]) == ""
@@ -236,6 +276,16 @@ strings, or false if you do not. We only care about substrings that are longer
 than one letter long.
 =end
 
+def substring_test(str1, str2)
+  str1.downcase.chars.each_with_index do |char1, idx1|
+    break if idx1 >= str1.size - 1
+    str2.downcase.chars.each_with_index do |char2, idx2|
+      return true if char1 == char2 && str1.downcase[idx1+1] == str2.downcase[idx2+1]
+
+    end
+  end
+  false
+end
 
 # p substring_test('Something', 'Fun') == false
 # p substring_test('Something', 'Home') == true
@@ -262,6 +312,13 @@ Only lower case letters will be used (a-z). No punctuation or digits will be
 included.
 =end
 
+def scramble(str1, str2)
+
+  str2.chars.uniq.all? do |char|
+    str1.count(char) >= str2.count(char)
+  end
+
+end
 
 # p scramble('javaass', 'jjss') == false
 # p scramble('rkqodlw', 'world') == true
@@ -288,6 +345,23 @@ Example:
 "" -> 0
 =end
 
+def is_palindrome?(str)
+  str == str.reverse
+end
+
+def longest_palindrome(str)
+
+  palindromes = []
+
+  (0...str.size).each do |start_idx|
+    (start_idx...str.size).each do |end_idx|
+      substr = str[start_idx..end_idx]
+      palindromes << substr.size if is_palindrome?(substr)
+    end
+  end
+
+  palindromes.max
+end
 
 # p longest_palindrome("a") == 1
 # p longest_palindrome("aa") == 2
@@ -319,10 +393,24 @@ Index 0 is the place where the left side and right side are equal.
 =end
 
 
-p find_even_index([1, 2, 3, 4, 3, 2, 1]) == 3
-p find_even_index([1, 100, 50, -51, 1, 1]) == 1 
-p find_even_index([1, 2, 3, 4, 5, 6]) == -1
-p find_even_index([20, 10, 30, 10, 10, 15, 35]) == 3
-p find_even_index([20, 10, -80, 10, 10, 15, 35]) == 0
-p find_even_index([10, -80, 10, 10, 15, 35, 20]) == 6
-p find_even_index([-1, -2, -3, -4, -3, -2, -1]) == 3
+def find_even_index(arr)
+  counter = 0
+
+  while counter < arr.size
+    subarr_left = arr[...counter].sum
+    subarr_right = arr[counter + 1...arr.size].sum
+    return counter if subarr_left == subarr_right
+    
+    counter += 1
+  end
+
+  -1
+end
+
+# p find_even_index([1, 2, 3, 4, 3, 2, 1]) == 3
+# p find_even_index([1, 100, 50, -51, 1, 1]) == 1 
+# p find_even_index([1, 2, 3, 4, 5, 6]) == -1
+# p find_even_index([20, 10, 30, 10, 10, 15, 35]) == 3
+# p find_even_index([20, 10, -80, 10, 10, 15, 35]) == 0
+# p find_even_index([10, -80, 10, 10, 15, 35, 20]) == 6
+# p find_even_index([-1, -2, -3, -4, -3, -2, -1]) == 3

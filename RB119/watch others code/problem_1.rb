@@ -53,6 +53,7 @@ def determine_divisors(int)
 end
 
 def repeated_substring_pattern(string)
+  
   # with long input string, this helper function can be beneficial
   # otherwise iterating up to half the input string length will be sufficient
   divisors = determine_divisors(string.length)  

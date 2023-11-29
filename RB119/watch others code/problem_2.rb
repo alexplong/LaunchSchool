@@ -34,96 +34,23 @@ questions?
     ]
 
 # Algorithm
-- Create an empty output array
-- For each string in strings
--   Create a tally of each word and store in a dictionary
-- For each word in dictionary
-  - Check if key is not in output AND is included in every hash in the dictionary
-    - If true, get all values for the key in from every hash in the dictionary
-    - Determine minimum of all those values
-    - Append key string to output array the minimum number of times
-- Return output array
-
-# tally_characters method
-- Given a string
-- For each character in string
-  - Create key-value pair with value set to 1 if key does not exist
-  - Otherwise update value associated with key by 1
-- Return hash
-
-# tally_character refactor (without using #tally)
-- create an empty hash for output
-- given a string
-- transform string to an array of uniq string characters
-- each character in array of uniq characters
-  - count curr character in input string
-  - store character as key and count as value in output hash
-- return hash
-
-# in_every_dictionary? method
-- Given a collection containing array of hash elements and key to check in every hash
-- Iterate through every dictionary and check if element passed in is a key in every dictionary
-- return true if it is otherwise return false
-
-# all_values_of_key method
-- Given an array of hashes and a hash key
-- Each hash in array
-  - Append value associated with key to array
-- Return array of values
-
+- Given an array of strings
+- Remove first string from array and split it into an array of chars
+- Iterate through array of chars for selection
+    - Iterate through array of strings
+      - Replace current char in each element in input array with empty string destructively
+- Return selected array
 =end
 
-# def tally_characters(string)
-#   string.chars.each_with_object({}) do |char, hsh|
-#     if hsh[char] == nil
-#       hsh[char] = 1
-#     else
-#       hsh[char] += 1
-#     end
-#   end
-# end
-
-def tally_characters(string)
-  string.chars.uniq.each_with_object({}) do |char, dict|
-    dict[char] = string.count(char)
-  end
-end
-
-def in_every_dictionary?(dictionary, character)
-  dictionary.all? do |hsh|
-    hsh.include?(character)
-  end
-end
-
-def all_values_of_key(dictionary, key)
-  dictionary.each_with_object([]) do |hsh, character_count|
-    character_count << hsh[key]
-  end
-end
-
 def common_chars(arr)
-  output = []
-  dictionary = []
-  arr.each {|word| dictionary << tally_characters(word)}
-
-  dictionary.each do |hsh|
-    hsh.each do |key, value|
-
-      if !output.include?(key) && in_every_dictionary?(dictionary, key)
-        character_count = all_values_of_key(dictionary, key).min
-
-        character_count.times do
-          output << key
-        end
-
-      end
-    end
-
+  first_word = arr.shift.chars
+  first_word.select do |char|
+    arr.all? {|word| word.sub!(char, '')}
   end
-  output
+
 end
 
-p common_chars(["bella", "label", "roller"]) == ["e", "l", "l"]
+p common_chars(["bella", "label", "roller"]) #== ["e", "l", "l"]
 p common_chars(["cool", "lock", "cook"]) == ["c", "o"]
 p common_chars(["hello", "goodbye", "booya", "random"]) == ["o"]
 p common_chars(["aabbaaaa", "ccdddddd", "eeffee", "ggrrrrr", "yyyzzz"]) == []
