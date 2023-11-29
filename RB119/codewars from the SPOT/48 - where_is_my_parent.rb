@@ -16,9 +16,53 @@ Task:
 
 Place all people in alphabetical order where Mothers are followed by their children, i.e. "aAbaBb" => "AaaBbb".
 
+
+input: a string
+output: a new string
+
+RULES
+- Given a string of characters
+  - Uppercase chars are mother (are unique) and same letter but lowercase are the children (not unique)
+- Return string in alphabetical order with uppercase letter is followed by the lowercase forms
+- Empty string input is a possibility
+
+DATA STRUCTURE
+
+ALGORITHM
+- Given a string of chars both upper (unique) and lowercase
+- Create two variables parents and kids and set to empty array
+- Create a result variable and set to empty string
+- Iterate through the string
+  - Push uppercase chars to parents array
+  - Push lowercase chars to kids array
+- Iterate through sorted parents array
+  - Append parent to result string
+  - Get count of lowercase parent in kids array
+  - Append lowercase parent to result x count times
+- Return result
 =end
-p find_children("abBA") == "AaBb"
-p find_children("AaaaaZazzz") == "AaaaaaZzzz"
-p find_children("CbcBcbaA") == "AaBbbCcc"
-p find_children("xXfuUuuF") == "FfUuuuXx"
-p find_children("") == ""
+
+def find_children(str)
+  # # parents, result = [[], ""]
+  # result = ""
+
+  # parents, kids = str.chars.partition do |char|
+  #                   char.match?(/[A-Z]/)
+  #                 end
+
+  # # str.each_char do |char|
+  # #   char.match?(/[A-Z]/) ? parents << char : kids << char
+  # # end
+
+  # parents.sort.each do |char|
+  #   result << char
+  #   kids_count = str.count(char.downcase)
+  #   result << char.downcase * kids_count
+  # end
+
+  # result
+
+  str.chars.sort.sort_by {|char| char.downcase}.join
+
+
+end
