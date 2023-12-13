@@ -71,6 +71,11 @@ def nexus(hsh)
   end.first
 end
 
+
+def nexus(hsh)
+  
+end
+
 p nexus({1 => 3, 3 => 3, 5 => 1}) #== 3
 p nexus({1 => 10, 2 => 6, 3 => 4, 5 => 1}) #== 3
 p nexus({1 => 10, 2 => 3, 3 => 4, 5 => 1}) #== 2

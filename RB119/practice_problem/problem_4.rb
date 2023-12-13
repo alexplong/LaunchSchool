@@ -80,6 +80,25 @@ end
 
 
 
+
+def closest_numbers(arr)
+  pair = []
+  difference = arr.max
+
+  arr.each_with_index do |num1, idx1|
+    ((idx1+1)...arr.size).each do |idx2|
+      diff = (num1 - arr[idx2]).abs
+      if diff < difference
+        pair = [num1, arr[idx2]]
+        difference = diff
+      end
+    end
+  end
+
+  pair
+end
+
+
 p closest_numbers([5, 25, 15, 11, 20]) #== [15, 11]
 p closest_numbers([19, 25, 32, 4, 27, 16]) #== [25, 27]
 p closest_numbers([12, 7, 17]) #== [12, 7]

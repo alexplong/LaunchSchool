@@ -73,6 +73,8 @@ end
 
 
 
+
+
 p find_missing_letter(["a","b","c","d","f"]) #== "e"
 p find_missing_letter(["O","Q","R","S"]) == "P"
 p find_missing_letter(["b","d"]) == "c"

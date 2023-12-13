@@ -67,6 +67,20 @@ def decipher_this(text)
   end.flatten.join(' ')
 end
 
+
+def decipher_this(str)
+  str.split.map do |word| 
+    word = word.scan(/[0-9]+|[a-z]+/i) 
+    if word.size == 1
+      word[0].to_i.chr
+    else
+      word[1][0], word[1][-1] = word[1][-1], word[1][0]
+      word[0].to_i.chr + word[1]
+    end
+  end.join(' ')
+
+end
+
 p decipher_this("65 119esi 111dl 111lw 108dvei 105n 97n 111ka") == "A wise old owl lived in an oak"
 p decipher_this("84eh 109ero 104e 115wa 116eh 108sse 104e 115eokp") == "The more he saw the less he spoke"
 p decipher_this("84eh 108sse 104e 115eokp 116eh 109ero 104e 104dare") == "The less he spoke the more he heard"

@@ -61,6 +61,18 @@ def domain_name(url)
 
 end
 
+def domain_name(url)
+  prefix, suffix = [['https://www', 'https://', 'http://www', 'http://', 'www.'], 
+                    ['.com', '.co.jp', '.ru']]
+  web_names = prefix + suffix
+
+  # p web_regexp_patterns = Regexp.new(web_names.join("|"), Regexp::IGNORECASE) #for ignorecase flag
+  p web_regexp_patterns = Regexp.union(web_names)       # not sure how to do in #union 
+
+
+  url.split(web_regexp_patterns).last ## a 2-element array gets returned with the string being in index 1
+end
+
 p domain_name("http://google.com") == "google"
 p domain_name("http://google.co.jp") == "google"
 p domain_name("www.xakep.ru") == "xakep"

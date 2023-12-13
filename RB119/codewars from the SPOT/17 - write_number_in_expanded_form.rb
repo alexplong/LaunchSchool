@@ -54,6 +54,15 @@ def expanded_form(int)
 
 end
 
+def expanded_form(num)
+  num.digits.map.with_index do |n, i|
+    n * (10 ** i)
+  end.reject do |n|
+    n == 0
+  end.reverse.join(' + ')
+end
+
+
 p expanded_form(12) == '10 + 2'
 p expanded_form(42) == '40 + 2'
 p expanded_form(70304) == '70000 + 300 + 4'

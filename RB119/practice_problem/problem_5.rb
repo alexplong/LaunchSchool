@@ -80,6 +80,9 @@ def least_common_char(str)
   str_count.key(str_count.values.min)
 end
 
+def least_common_char(str)
+  str.downcase.each_char 
+end
 p least_common_char("Hello World") #== "h"
 p least_common_char("Peter Piper picked a peck of pickled peppers") #== "t"
 p least_common_char("Mississippi") #== "m"
