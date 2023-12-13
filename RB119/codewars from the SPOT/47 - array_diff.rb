@@ -11,6 +11,25 @@ If a value is present in b, all of its occurrences must be removed from the othe
 
 =end
 
+=begin
+input: a pair of array of integers
+output: an array of integers
+
+RULES
+- Given arr1 and arr2
+- Remove elements that are in arr2 from arr1
+- Return the new array 
+
+ALGORITHM
+- 
+=end
+
+def array_diff(arr1, arr2)
+  arr1 - arr2
+
+end
+
+
 p array_diff([1,2], [1]) == [2]
 p array_diff([1,2,2], [1]) == [2,2]
 p array_diff([1,2,2], [2]) == [1]

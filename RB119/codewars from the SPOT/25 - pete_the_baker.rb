@@ -19,6 +19,28 @@ cakes({apples: 3, flour: 300, sugar: 150, milk: 100, oil: 100}, {sugar: 500, flo
 
 =end
 
+=begin
+input: a pair of hashes
+output: an integer
+
+RULES
+- Given a hash representing a recipe list and another hash representing a list of available ingredients
+- Return number of recipes that can be made given list of available ingredients
+
+ALGORITHM
+- Given a hash representing a recipe list and another hash representing a list of available ingredients
+- Get an array of values that represents the minimum number of servings that can be obtained per ingredient
+  - If available item is not there, return 0 instead of servings
+- Return the smallest number from that list
+=end
+
+def cakes(ingredients, available)
+  ingredients.map do |item, amount|
+    amount_available = available[item]
+    amount_available ? amount_available / amount : 0
+  end.min
+end
+
 p cakes({"flour"=>500, "sugar"=>200, "eggs"=>1},{"flour"=>1200, "sugar"=>1200, "eggs"=>5, "milk"=>200}) == 2
 p cakes({"cream"=>200, "flour"=>300, "sugar"=>150, "milk"=>100, "oil"=>100},{"sugar"=>1700, "flour"=>20000, "milk"=>20000, "oil"=>30000, "cream"=>5000}) == 11
 p cakes({"apples"=>3, "flour"=>300, "sugar"=>150, "milk"=>100, "oil"=>100},{"sugar"=>500, "flour"=>2000, "milk"=>2000}) == 0

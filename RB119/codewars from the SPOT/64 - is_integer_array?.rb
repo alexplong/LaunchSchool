@@ -13,6 +13,25 @@ returns false / False for every other input.
 
 =end
 
+=begin
+
+RULES
+- return false if object is not an array
+- return false if input is not a number
+=end
+
+
+def is_int_array(obj)
+  return false if obj.class != Array
+
+  obj.each do |n|
+    return false if n.nil? || n.to_i != n
+  end
+
+  true
+end
+
+
 p is_int_array([]) == true # "Input: []"
 p is_int_array([1, 2, 3, 4]) == true # "Input: [1, 2, 3, 4]"
 p is_int_array([-11, -12, -13, -14]) == true # "Input: [-11, -12, -13, -14]"

@@ -13,7 +13,28 @@ index, and the second element is the column index of the bomb location (both
 should be 0 based). All 2D arrays passed into your function will be square (NxN), 
 and there will only be one mine in the array.
 
+
+input: a nested array
+output: a 2-element array
+
+RULES
+- Given square 2D grid - nested arrays
+- Find the location of the mine (designated by the 1) in the arrays
+- There will only be 1 mine
+
+ALGORITHM
+- Given a 2D array of size NxN
+- Iterate through the arrays with index (outer_idx)
+  - If the subarray has a 1 included in it
+    - Determine the index of the 1 in the sub array (inner_idx)
+    - Return a 2-element array as such [outer_idx, inner_idx]
 =end
+
+def mineLocation(arr)
+  arr.each_with_index do |subarr, outer_idx|
+    return [outer_idx, subarr.index(1)] if subarr.include?(1)
+  end
+end
 
 p mineLocation( [ [1, 0, 0], [0, 0, 0], [0, 0, 0] ] ) == [0, 0]
 p mineLocation( [ [0, 0, 0], [0, 1, 0], [0, 0, 0] ] ) == [1, 1]

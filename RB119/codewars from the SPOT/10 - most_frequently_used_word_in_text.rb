@@ -33,7 +33,69 @@ Examples:
 Bonus points (not really, but just for fun):
 - Avoid creating an array whose memory footprint is roughly as big as the input text.
 - Avoid sorting the entire array of unique words.
+
+input: a string (with punc and potential line breaks)
+output: an array containing 3 strings
+
+RULES
+- Given a string that can contain punc and line-breaks
+- Return an array of the top-3 most occurring words
+  - in descending order with words all in lowercase
+  - can break ties arbitrarily
+- case-insensitive for matches
+- if text contains less than 3 unique words
+  - then return either top-2 or top-1 words
+  - or empty array if no words
+
+
+
+ALGORITHM
+- Given a string
+- Get an array of words from the given downcased string where words are split by ' ' or '-'
+- Create a hash of the count of the words from the array
+    - Key - word ; value - count of words in string
+- Sort the hash collection by value in descending order (convert arr back to hash)
+- Select the top 3 keys in the hash that have the highest value
+- Return those 3 keys in an array
+
 =end
+
+def top_3_words(str)
+  str.downcase.scan(/[a-z']+/).select {|word| word.match(/[a-z]/)}.tally.sort_by {|k, v| -v}.to_h.keys.first(3)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def top_3_words(str)
+  words = str.downcase.scan(/[a-z']+/).reject { |word| word[0] == "'" && word[-1] == "'"}
+  words.uniq.map do |word|
+    [word, words.count(word)]
+  end.sort_by do |subarr|
+    -subarr[1]
+  end.to_h.keys.first(3)
+end
 
 p top_3_words("a a a  b  c c  d d d d  e e e e e") == ["e", "d", "a"]
 p top_3_words("e e e e DDD ddd DdD: ddd ddd aa aA Aa, bb cc cC e e e") == ["e", "ddd", "aa"]

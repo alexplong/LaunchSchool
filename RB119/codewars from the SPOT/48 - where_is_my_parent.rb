@@ -62,7 +62,22 @@ def find_children(str)
 
   # result
 
-  str.chars.sort.sort_by {|char| char.downcase}.join
+  # str.chars.sort.sort_by {|char| char.downcase}.join # does not work in local env
 
+
+  parents = str.chars.sort.select do |char|
+              char.match?(/[A-Z]/)
+            end
+
+  parents.map do |char|
+    char + (char.downcase * str.count(char.downcase))
+  end.join
 
 end
+
+
+p find_children("abBA") == "AaBb"
+p find_children("AaaaaZazzz") == "AaaaaaZzzz"
+p find_children("CbcBcbaA") == "AaBbbCcc"
+p find_children("xXfuUuuF") == "FfUuuuXx"
+p find_children("") == ""

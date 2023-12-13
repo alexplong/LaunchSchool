@@ -16,7 +16,35 @@ Examples
 "    Hello     World   "                  =>  "#HelloWorld"
 ""                                        =>  false
 
+input: a string
+output: a new string or false
+
+RULES
+- Given a string
+- Return a new string w/ hashtag and no spaces where each word is capitalized
+- Return false if string is empty or final string is greater than 140 chars
+
+ALGORITHM
+- Given a string
+- Split the string and get an array of words
+- If the array is empty immediately return false
+- Transform each word in the array to its capitalized form
+- Prepend the array with a hashtag
+- Join the array into a string
+- Get length of string
+- Return false if string length is greater than 140 else return string
+
 =end
+
+def generateHashtag(str)
+  result = str.split.map(&:capitalize)
+  return false if result.empty?
+
+  result.unshift('#')
+  result = result.join
+
+  result.size > 140 ? false : result
+end
 
 p generateHashtag("") == false
 p generateHashtag(" " * 200) == false

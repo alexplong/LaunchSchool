@@ -26,6 +26,48 @@ Examples:
 
 =end
 
+=begin
+input: a string and an integer
+output: a string
+
+RULES
+- Given a string and a number
+- Get substrings of number size
+- Reverse substring if the sum of the cubes of its digits is divisible by 2
+  - Else rotate it to the left by one
+- Return that new string
+
+ALGORITHM
+- Given a string and an integer
+- Get a collection of substrings of integer size
+  - If substring > sum of it is cubes of its digits is divisible by 2 reverse it
+  - Otherwise rotation by 1
+- Join the substrings togetehr and return string
+
+=end
+
+def revrot(str, n)
+  collection = []
+  counter = 0
+
+  while counter < str.size
+    substr = str.slice(counter, 5)
+
+    if substr.size < 5
+      collection << substr
+    elsif substr.chars.map(&:to_i).sum % 2 == 0
+      collection << substr.reverse
+    else
+      substr[0], substr[-1] = substr[-1], substr[0]
+      substr
+    end
+
+    counter += 5
+  end
+
+  collection.join
+end
+
 p revrot("1234", 0) == ""
 p revrot("", 0) == ""
 p revrot("1234", 5) == ""

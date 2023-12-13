@@ -45,5 +45,31 @@ def string_transformer(str)
   str
 end
 
-p string_transformer('Example string') #== 'STRING eXAMPLE'
-p string_transformer("    A b  C   ")# == "   c  B a    "
+=begin
+'Example string'
+
+"gnirts elpmaxE"      => REVERSE STRING - takes care of all whitespace and word position
+                      =>                  NOW fix the words
+                      
+["gnirts", "elpmaxE"] => REFERENCE of REVERSED STRING (ALL WHITESPACE FIXED) 
+["STRING", "eXAMPLE"] => FIXED REF of STRING (NOW WORDS FIXED) - use REFERENCE and replace with FIXED
+                      => Iterate through reference and use substitution
+=end
+
+def string_transformer(str)
+  rev_str = str.reverse
+
+  reference = rev_str.split
+  fixed_ref = reference.map(&:reverse).map(&:swapcase)
+
+  reference.each_with_index do |ref_word, i|
+    rev_str.sub!(ref_word, fixed_ref[i])
+  end
+
+  rev_str
+end
+
+p string_transformer('Example string') == 'STRING eXAMPLE'
+p string_transformer("    A b  C   ") == "   c  B a    "
+p string_transformer("A b  C   ") == "   c  B a"
+p string_transformer("    A b  C") == "c  B a    "

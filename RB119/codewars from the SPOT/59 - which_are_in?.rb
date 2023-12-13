@@ -26,6 +26,14 @@ Don't mutate the inputs.
 
 =end
 
+def in_array(arr1, arr2)
+  arr1.select do |word|
+    arr2.any? { |other_word| other_word.include?(word) }
+  end
+
+end
+
+
 a1 = ["arp", "live", "strong"]
 a2 = ["lively", "alive", "harp", "sharp", "armstrong"]
 

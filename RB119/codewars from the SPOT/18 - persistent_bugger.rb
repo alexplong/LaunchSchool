@@ -17,6 +17,49 @@ For example:
 
 =end
 
+=begin
+input: an integer
+output: an integer
+
+RULES
+- Given an integer
+- Get it's multiplicative persistence
+  - 39 => 3 * 9 = 27 => 2 * 7 = 14 => 1 * 4 = 4
+- Continue until you reach a single digit
+
+ALGORITHM
+- Given an integer
+- Create a variable result and set it to 0
+- While given integer is greater than 9
+  - Split integer into an array of numbers
+  - Get the product from these numbers
+  - Reassign integer to this new product value
+  - Increment persistence by 1
+- Return persistence
+=end
+
+# def persistence(int)
+#   result = 0
+
+#   while int > 9
+#     int = int.digits.reduce(:*)
+#     result += 1
+#   end
+#   result
+# end 
+
+
+def persistence(num)
+  iterations = 0
+
+  while num > 9
+    num = num.digits.reduce(:*)
+    iterations += 1
+  end
+
+  iterations
+end
+
 p persistence(39) == 3
 p persistence(4) == 0
 p persistence(25) == 2

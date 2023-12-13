@@ -60,27 +60,38 @@ ALGORITHM
 - Return output
 =end
 
+# def alphabetized(str)
+
+#   output = ""
+#   dictionary = {}
+
+#   str.each_char do |char|
+#     next unless char.match?(/[A-Za-z]/)
+
+#     if dictionary[char.downcase]
+#       dictionary[char.downcase] << char
+#     else
+#       dictionary[char.downcase] = [char]
+#     end
+#   end
+
+#   our_keys = dictionary.keys.sort
+#   our_keys.each do |curr_key|
+#     output << dictionary[curr_key].join
+#   end
+
+#   output
+# end
+
+
 def alphabetized(str)
+  # result = str.scan(/[a-z]/i).sort_by { |char| char.downcase } # not in local environment
+  # result.join
 
-  output = ""
-  dictionary = {}
-
-  str.each_char do |char|
-    next unless char.match?(/[A-Za-z]/)
-
-    if dictionary[char.downcase]
-      dictionary[char.downcase] << char
-    else
-      dictionary[char.downcase] = [char]
-    end
+  curr_letters = str.downcase.split.sort.uniq
+  curr_letters.each_with_object("") do |char, result|
+    result << str.scan(/#{char}/i).join
   end
-
-  our_keys = dictionary.keys.sort
-  our_keys.each do |curr_key|
-    output << dictionary[curr_key].join
-  end
-
-  output
 end
 
 p alphabetized("") == ""

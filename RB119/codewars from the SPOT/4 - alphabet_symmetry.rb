@@ -15,8 +15,36 @@ Examples
 
 solve(["abode","ABc","xyzD"]) = [4, 3, 1]
 
+input: an array of strings
+output: an array of integers
+
+RULES
+- Given an array of strings
+- Get the number of chars for each string that occupy the similar positions in the alphabet
+- Return an array of that count
+  - Chars are both uppercase and lowercase with no spaces
+
+ALGORITHM
+- Given an array of strings
+- Create a reference alphabet from a-z in an array
+- Iterate through each word in the array for transformation
+  - Iterate through each char of DOWNCASED word with index to COUNT index position
+    - Check if curr index is equal to index of curr char in alphabet reference array
+- Return the transformed array that consists of integers representing the count
 =end
-p solve(["abode","ABc","xyzD"]) == [4,3,1]
-p solve(["abide","ABc","xyz"]) == [4,3,0]
-p solve(["IAMDEFANDJKL","thedefgh","xyzDEFghijabc"])== [6,5,7]
-p solve(["encode","abc","xyzD","ABmD"]) == [1, 3, 1, 3]
+
+def solve(arr)
+  alpha_ref = ('a'..'z').to_a
+
+  arr.map do |word|
+    word.downcase.chars.each_with_index.count do |char, idx, char2|
+      idx == alpha_ref.index(char)
+    end
+  end
+  
+end
+
+p solve(["abode","ABc","xyzD"]) #== [4,3,1]
+p solve(["abide","ABc","xyz"]) #== [4,3,0]
+p solve(["IAMDEFANDJKL","thedefgh","xyzDEFghijabc"])#== [6,5,7]
+p solve(["encode","abc","xyzD","ABmD"]) #== [1, 3, 1, 3]

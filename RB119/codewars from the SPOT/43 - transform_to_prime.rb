@@ -36,6 +36,35 @@ the closest prime number (191)* .
 
 =end
 
+=begin
+input: an array of integers
+output: an integer
+
+RULES
+- Given an array of numbers
+- Find the number that needs to be inserted into the array to return a sum that is a prime
+- If the array of numbers is already a prime when sum, return 0
+
+ALGORITHM
+- Given an array of numbers
+- Get the sum from the array
+- Iterate from sum up to the next number
+  - Check if number is a prime number
+    - Primes are only divisible by itself and 1
+- Subtract sum of array from the prime number
+- Return that number
+=end
+
+def is_prime?(num)
+  (2...num).all? { |i| num % i != 0 }
+end
+
+def minimum_number(arr)
+  (arr.sum...).each do |n|
+    break n - arr.sum if is_prime?(n)
+  end
+end
+
 p minimum_number([3,1,2]) == 1
 p minimum_number([5,2]) == 0
 p minimum_number([1,1,1]) == 0

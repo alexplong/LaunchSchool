@@ -34,5 +34,31 @@ Here's how it works:
 
 =end
 
+
+=begin
+input: an integer
+output: an integer
+
+RULES
+- Given an integer
+- Take the digits and get the sum
+- If sum is greater than 9 split it again
+- Return sum if less than 10
+
+ALGORITHM
+- Given an integer
+- Return the integer if it is less than 10
+- Transform integer into an array of digits
+- Get sum from the array
+- Recursive call with sum
+=end
+
+def digital_root(int)
+  return int if int < 10
+
+  digital_root(int.digits.sum)
+
+end
+
 p digital_root(16) == 7
 p digital_root(456) == 6

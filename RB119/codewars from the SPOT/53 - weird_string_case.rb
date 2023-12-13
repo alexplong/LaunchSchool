@@ -12,6 +12,20 @@ a single space(' ').
 
 =end
 
+def weirdcase(str)
+  words = str.scan(/[a-z]+/i)
+
+  words.map do |word|
+    word.chars.map.with_index do |char, i|
+      if i.even?
+        char.upcase
+      else
+        char.downcase
+      end
+    end.join
+  end.join(' ')
+end
+
 p weirdcase( "String" ) == "StRiNg"
 p weirdcase( "Weird string case" ) == "WeIrD StRiNg CaSe"
 

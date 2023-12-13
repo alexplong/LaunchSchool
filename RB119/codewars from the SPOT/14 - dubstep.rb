@@ -30,7 +30,32 @@ Separate the words with a space.
 Examples
 song_decoder("WUBWEWUBAREWUBWUBTHEWUBCHAMPIONSWUBMYWUBFRIENDWUB")  =>  WE ARE THE CHAMPIONS MY FRIEND
 
+
+input: a string (dubstep version)
+output: a new string (original)
+
+RULES
+- Given a string of words (non-empty input and does not exceed 200 chars)
+  - WUB is inserted at these locations:
+    - Before the first word (zero or more)
+    - After the last word (zero or more)
+    - Between each word (at least once)
+- Remove the WUB from the given string of words
+- Return that string with words separated by spaces
+
+ALGORITHM
+- Given a string
+- Split the string into an array of words that were separated by 'WUB'
+- Reject words from the array if it is an emtpy string
+- Join the array of words back to a string separated by spaces
+- Return that string
+
+
 =end
+
+def song_decoder(str)
+  str.split('WUB').reject(&:empty?).join(' ')
+end
 
 p song_decoder("AWUBBWUBC") == "A B C"
 p song_decoder("AWUBWUBWUBBWUBWUBWUBC") == "A B C"

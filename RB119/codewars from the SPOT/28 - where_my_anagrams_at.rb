@@ -66,6 +66,17 @@ def anagrams(word, arr)
 
 end
 
+
+
+# Refactor with sorting instead of tally
+def anagrams(word, arr)
+  word_arr = word.chars.sort
+  arr.select do |curr_word|
+    curr_word.chars.sort == word_arr
+  end
+end
+
+
 p anagrams('abba', ['aabb', 'abcd', 'bbaa', 'dada']) == ['aabb', 'bbaa']
 p anagrams('racer', ['crazer', 'carer', 'racar', 'caers', 'racer']) == ['carer', 'racer']
 p anagrams('laser', ['lazing', 'lazy',  'lacer']) == []

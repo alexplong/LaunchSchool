@@ -42,6 +42,27 @@ Note:
 
 =end
 
+=begin
+input: an array
+output: an integer
+
+RULES
+- Given an array of integers
+- Iterate through the array with index
+    - Get an array of the 'left' and 'right' sides of the array excluding teh current one
+    - Get the sum of those left and rights
+    - Return the index if the left and rights are equal
+- If no equals, return -1
+
+=end
+
+def find_even_index(arr)
+  (0...arr.size).each do |i|
+    return i if (arr[...i].sum == arr[(i+1)...].sum)
+  end
+  -1
+end
+
 p find_even_index([1,2,3,4,3,2,1]) == 3
 p find_even_index([1,100,50,-51,1,1]) == 1
 p find_even_index([1,2,3,4,5,6]) == -1

@@ -18,6 +18,31 @@ Example
 
 =end
 
+=begin
+input: a string
+output: an integer
+
+RULES
+- Given a string
+- Count number of unique chars that repeat
+- Return that number
+- Case insensitive
+
+Algorithm
+- Given a string
+- Get an array of unique chars from given string
+- Iterate through chars array
+  - select chars that return a count greater than 1
+- Count size of returned array
+- Return that value
+=end
+
+def duplicate_count(str)
+  str.chars.uniq.select do |char|
+    str.downcase.count(char) > 1
+  end.size
+end
+
 p duplicate_count("") == 0
 p duplicate_count("abcde") == 0
 p duplicate_count("abcdeaa") == 1
