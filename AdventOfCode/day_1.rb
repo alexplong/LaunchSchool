@@ -9,21 +9,27 @@ p (File.open(ARGV[0]).sum do |line|
   (0...line.size).each do |runner|
     if line[runner].match?(/[0-9]/)
       result << line[runner]
-      walker = runner
+      walker = runner + 1
     else
       substr = line.slice(walker..runner)
       if substr.match?(num_words_regexp)
-        p word = substr.scan(num_words_regexp).first
+        word = substr.scan(num_words_regexp).first
         num = num_words[word]
         result << num
-        walker = runner
+        walker = runner + 1
       end
     end
   end
 
-  line = line.scan(/[0-9]/)
+  # line = line.scan(/[0-9]/)
+  p line
+  p result
 
-  line.size == 1 ? (line.first + line.first).to_i : (line.first + line.last).to_i
+  first_first = (result.first + result.first).to_i
+  first_last = (result.first + result.last).to_i
+
+  # result.size == 1 ? (result.first + result.first).to_i : (result.first + result.last).to_i
+  result.size == 1 ? first_first : first_last
 end
 )
 
