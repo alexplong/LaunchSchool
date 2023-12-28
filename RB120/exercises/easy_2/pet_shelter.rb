@@ -12,15 +12,16 @@ class Shelter
       @adoptions[owner] = [pet]
     end
 
-    owner.adopt
+    owner.adopt(pet)
   end
 
   def print_adoptions
     adoptions.each do |owner, pets|
       puts "#{owner.name} has adopted the following pets:"
-      pets.each do |pet|
-        puts pet
-      end
+      owner.print_pets
+      # pets.each do |pet|
+      #   puts pet
+      # end
     end
   end
 end
@@ -33,8 +34,16 @@ class Owner
     @pets = []
   end
 
-  def adopt
-    @number_of_pets += 1
+  def adopt(pet)
+    @pets << pet
+  end
+
+  def number_of_pets
+    pets.size
+  end
+
+  def print_pets
+    puts pets
   end
 end
 
