@@ -1,6 +1,14 @@
 class Move
   VALID_MOVES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 
+  AI_WEIGHTS = {
+    'R2D2' => [2, 1, 1, 1, 1],
+    'Hal'  => [3, 2, 2, 1, 1],
+    'Chappie' => [1, 1, 1, 3, 3],
+    'Sonny'     => [1, 1, 3, 1, 3],
+    'Number 5' => [0, 1, 0, 0, 1]
+  }
+
   WINNING_MOVES = {
     'rock' => ['scissors', 'lizard'],
     'paper' => ['rock', 'spock'],
@@ -14,7 +22,7 @@ class Move
   end
 
   def >(other_move)
-    WINNING_MOVES[@value].include?(other_move)
+    WINNING_MOVES[@value].include?(other_move.to_s)
   end
 
   def <(other_move)
@@ -93,8 +101,15 @@ class Computer < Player
     self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
   end
 
+  def get_ai_move(name)
+    Move::VALID_MOVES.zip(Move::AI_WEIGHTS[name]).map do |subarr|
+      [subarr[0] * subarr[1]]
+    end.flatten
+  end
+
   def choose
-    self.move = Move.new(Move::VALID_MOVES.sample)
+    # self.move = Move.new(Move::VALID_MOVES.sample)
+    self.move = Move.new(get_ai_move(name).sample)
   end
 end
 
