@@ -145,8 +145,13 @@ class TTTgame
     display_board
   end
 
+  def joinor(unmarked_squares, delimiter=', ', word='or')
+    unmarked_squares[-1] = "#{word} #{unmarked_squares[-1]}" if unmarked_squares.size > 1
+    unmarked_squares.join(delimiter)
+  end
+
   def human_moves
-    puts "Choose a square: #{board.unmarked_keys.join(', ')}: "
+    puts "Choose a square: #{joinor(board.unmarked_keys)}: "
     square = nil
     loop do
       square = gets.chomp.to_i
