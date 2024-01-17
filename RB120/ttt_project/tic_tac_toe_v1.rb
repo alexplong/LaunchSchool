@@ -126,10 +126,11 @@ class Score
 end
 
 class Player
-  attr_reader :marker, :score
+  attr_reader :marker, :name, :score
 
   def initialize
     @marker = select_marker
+    @name = select_name
     @score = Score.new
   end
 end
@@ -146,11 +147,29 @@ class Human < Player
     end
     marker_choice
   end
+
+  def select_name
+    name_choice = "Player 1"
+
+    puts "Please enter your name: "
+    user_input = gets.chomp
+    name_choice = user_input unless user_input.strip.empty?
+
+    name_choice
+  end
 end
 
 class Computer < Player
   def select_marker
-    ['X', 'O'].reject { |marker| marker == TTTgame.player_marker }.first
+    if TTTgame.player_marker == 'X'
+      'O'
+    else
+      'X'
+    end
+  end
+
+  def select_name
+    ['R2D2', 'Chappie', 'T1000'].sample
   end
 
   def defensive_move(board)
@@ -192,10 +211,11 @@ class TTTgame
   def initialize
     @board = Board.new
     @human = Human.new
-    @computer = Computer.new
-    
     @@human_marker = @human.marker
+
+    @computer = Computer.new
     @@computer_marker = @computer.marker
+    
     @@first_to_move = @@human_marker
     
     @current_marker = @@human_marker
@@ -240,7 +260,7 @@ class TTTgame
   end
 
   def display_board
-    puts "You're a #{human.marker}. Computer is a #{computer.marker}."
+    puts "#{human.name}: #{human.marker}. #{computer.name}: #{computer.marker}."
     puts ""
     board.draw
     puts ""

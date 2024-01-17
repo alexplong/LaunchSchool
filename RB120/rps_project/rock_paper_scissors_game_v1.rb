@@ -1,3 +1,5 @@
+require 'pry'
+
 class Move
   VALID_MOVES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 
@@ -91,7 +93,6 @@ class Human < Player
       break if Move::VALID_MOVES.include? choice
       puts "Sorry, invalid choice."
     end
-
     self.move = Move.new(choice)
   end
 end
