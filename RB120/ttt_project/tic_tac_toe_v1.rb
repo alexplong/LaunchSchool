@@ -128,21 +128,35 @@ end
 class Player
   attr_reader :marker, :score
 
-  def initialize(marker)
-    @marker = marker
+  def initialize
+    @marker = select_marker
     @score = Score.new
   end
 end
 
 class Human < Player
+  def select_marker
+    marker_choice = nil
 
+    puts "Please choose a marker: X or O"
+    loop do
+      marker_choice = gets.chomp.upcase
+      break if ['X', 'O'].include? marker_choice
+      puts "Please choose a valid marker."
+    end
+    marker_choice
+  end
 end
 
 class Computer < Player
+  def select_marker
+    ['X', 'O'].reject { |marker| marker == TTTgame.player_marker }.first
+  end
+
   def defensive_move(board)
     Board::WINNING_LINES.each do |line|
       current_move = board.markers_at_positions(line)
-      if current_move.count(TTTgame::HUMAN_MARKER) == 2 && 
+      if current_move.count(TTTgame.player_marker) == 2 && 
          current_move.count(Square::INITIAL_MARKER) == 1
         return line[current_move.index(Square::INITIAL_MARKER)]
       end
@@ -157,7 +171,7 @@ class Computer < Player
     else
       Board::WINNING_LINES.each do |line|
         current_move = board.markers_at_positions(line)
-        if current_move.count(TTTgame::COMPUTER_MARKER) == 2 &&
+        if current_move.count(TTTgame.computer_marker) == 2 &&
           current_move.count(Square::INITIAL_MARKER) == 1
           return line[current_move.index(Square::INITIAL_MARKER)]
         end
@@ -169,25 +183,30 @@ class Computer < Player
 end
 
 class TTTgame
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
+  @@human_marker = nil
+  @@computer_marker = nil
+  @@first_to_move = nil
 
   attr_reader :board, :human, :computer, :current_marker
 
   def initialize
     @board = Board.new
-    @human = Player.new("X")
-    @computer = Computer.new("O")
-    @current_marker = HUMAN_MARKER
+    @human = Human.new
+    @computer = Computer.new
+    
+    @@human_marker = @human.marker
+    @@computer_marker = @computer.marker
+    @@first_to_move = @@human_marker
+    
+    @current_marker = @@human_marker
   end
 
-  def player_1_marker
-    @human.marker
+  def self.player_marker
+    @@human_marker
   end
 
-  def player_2_marker
-    @computer.marker
+  def self.computer_marker
+    @@computer_marker
   end
 
   def play
@@ -234,8 +253,8 @@ class TTTgame
   end
 
   def display_score
-    puts "X Points: #{human.score}"
-    puts "O Points: #{computer.score}"
+    puts "#{human.marker} Points: #{human.score}"
+    puts "#{computer.marker} Points: #{computer.score}"
     puts ""
   end
 
@@ -274,11 +293,11 @@ class TTTgame
   def display_result
 
     case board.winning_marker
-    when HUMAN_MARKER
+    when @@human_marker
       human.score.increment
       display_board
       puts "You won!"
-    when COMPUTER_MARKER
+    when @@computer_marker
       computer.score.increment
       display_board
       puts "You lose! Computer wins!"
@@ -312,7 +331,7 @@ class TTTgame
 
   def reset
     board.reset
-    @current_marker = FIRST_TO_MOVE
+    @current_marker = @@first_to_move
     clear
   end
 
@@ -322,16 +341,16 @@ class TTTgame
   end
 
   def human_turn?
-    @current_marker == HUMAN_MARKER
+    @current_marker == @@human_marker
   end
 
   def current_player_moves
-    if @current_marker == HUMAN_MARKER
+    if @current_marker == @@human_marker
       human_moves
-      @current_marker = COMPUTER_MARKER
+      @current_marker = @@computer_marker
     else
       computer_moves
-      @current_marker = HUMAN_MARKER
+      @current_marker = @@human_marker
     end
   end
 
