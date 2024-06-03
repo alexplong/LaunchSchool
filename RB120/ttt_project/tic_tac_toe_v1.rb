@@ -95,31 +95,31 @@ end
 
 class Score
   attr_reader :points
-  
+
   def initialize
     reset
   end
-  
+
   def increment
     @points += 1
   end
-  
+
   def >=(num)
     @points >= num
   end
-  
+
   def ==(num)
     @points == num
   end
-  
+
   def +(num)
     @points + num
   end
-  
+
   def reset
     @points = 0
   end
-  
+
   def to_s
     @points.to_s
   end
@@ -175,7 +175,7 @@ class Computer < Player
   def defensive_move(board)
     Board::WINNING_LINES.each do |line|
       current_move = board.markers_at_positions(line)
-      if current_move.count(TTTgame.player_marker) == 2 && 
+      if current_move.count(TTTgame.player_marker) == 2 &&
          current_move.count(Square::INITIAL_MARKER) == 1
         return line[current_move.index(Square::INITIAL_MARKER)]
       end
@@ -185,19 +185,17 @@ class Computer < Player
   end
 
   def offensive_move(board)
-    if board.markers_at_positions([5]) == [" "]
-      return 5 
-    else
-      Board::WINNING_LINES.each do |line|
-        current_move = board.markers_at_positions(line)
-        if current_move.count(TTTgame.computer_marker) == 2 &&
-          current_move.count(Square::INITIAL_MARKER) == 1
-          return line[current_move.index(Square::INITIAL_MARKER)]
-        end
-      end
+    return 5 if board.markers_at_positions([5]) == [" "]
 
-      nil
+    Board::WINNING_LINES.each do |line|
+      current_move = board.markers_at_positions(line)
+      if current_move.count(TTTgame.computer_marker) == 2 &&
+         current_move.count(Square::INITIAL_MARKER) == 1
+        return line[current_move.index(Square::INITIAL_MARKER)]
+      end
     end
+
+    nil
   end
 end
 
@@ -215,9 +213,9 @@ class TTTgame
 
     @computer = Computer.new
     @@computer_marker = @computer.marker
-    
+
     @@first_to_move = @@human_marker
-    
+
     @current_marker = @@human_marker
   end
 
@@ -249,10 +247,13 @@ class TTTgame
 
   def display_round_winner
     if board.winning_marker
-      puts "#{board.winning_marker} wins Round: #{human.score.points + computer.score.points}!"
-    else 
+      curr_round = human.score.points + computer.score.points
+      puts "#{board.winning_marker} wins Round: #{curr_round}!"
+    else
       puts "Round tie!!!"
     end
+
+    continue_prompt
   end
 
   def clear
@@ -279,7 +280,10 @@ class TTTgame
   end
 
   def joinor(unmarked_squares, delimiter=', ', word='or')
-    unmarked_squares[-1] = "#{word} #{unmarked_squares[-1]}" if unmarked_squares.size > 1
+    if unmarked_squares.size > 1
+      unmarked_squares[-1] = "#{word} #{unmarked_squares[-1]}"
+    end
+
     unmarked_squares.join(delimiter)
   end
 
@@ -299,19 +303,13 @@ class TTTgame
     offense = computer.offensive_move(board)
     defense = computer.defensive_move(board)
 
-    if !!offense
-      square = offense
-    elsif !!defense
-      square = defense
-    else
-      square = board.unmarked_keys.sample
-    end
-    
-    board[square] = computer.marker
+    return board[offense] = computer.marker if offense
+    return board[defense] = computer.marker if defense
+
+    board[board.unmarked_keys.sample] = computer.marker
   end
 
   def display_result
-
     case board.winning_marker
     when @@human_marker
       human.score.increment
@@ -321,7 +319,7 @@ class TTTgame
       computer.score.increment
       display_board
       puts "You lose! Computer wins!"
-    else 
+    else
       display_board
       puts "The board is full."
     end
@@ -333,11 +331,7 @@ class TTTgame
     loop do
       puts "Would you like to play again? (y/n)"
       answer = gets.chomp.downcase
-      if %w(y n).include? answer
-        @human.score.reset
-        @computer.score.reset
-        break
-      end
+      break reset_scores if %w(y n).include? answer
       puts "Sorry, must be y or n"
     end
 
@@ -353,6 +347,11 @@ class TTTgame
     board.reset
     @current_marker = @@first_to_move
     clear
+  end
+
+  def reset_scores
+    @human.score.reset
+    @computer.score.reset
   end
 
   def display_play_again_message
@@ -382,7 +381,7 @@ class TTTgame
       display_board_and_clear_screen if human_turn?
     end
   end
-  
+
   def game_winner?
     @human.score == 3 || @computer.score == 3
   end
@@ -395,9 +394,7 @@ class TTTgame
       display_result
       if game_winner?
         break unless play_again?
-      else
         display_round_winner
-        continue_prompt
       end
       reset
     end
