@@ -15,7 +15,10 @@ You may remember our Minilang language from back in the RB101-RB109 Medium exerc
   - PRINT Print the register value
   - All operations are integer operations (which is only important with DIV and MOD).
 
-Programs will be supplied to your language method via a string passed in as an argument. Your program should produce an error if an unexpected item is present in the string, or if a required stack value is not on the stack when it should be (the stack is empty). In all error cases, no further processing should be performed on the program.
+Programs will be supplied to your language method via a string passed in as an argument. 
+- Your program should produce an error if an unexpected item is present in the string, or ...
+- If a required stack value is not on the stack when it should be (the stack is empty). 
+- In all error cases, no further processing should be performed on the program.
 
 You should initialize the register to 0.
 =end
@@ -30,6 +33,10 @@ RULES
 
 - Define `Minilang#eval` instance method
 =end
+
+class UnexpectedStackCommand < StandardError; end
+class EmptyStack < StandardError; end
+
 
 class Minilang
   def initialize(string)

@@ -71,8 +71,7 @@ class CircularBuffer
 
   def increment(position)
     position += 1
-    position = 0 if position >= @buffer.size
-    position
+    position = (position >= @buffer.size ? 0 : position)
   end
 end
 
@@ -93,25 +92,25 @@ ALGORITHM - Using `push` and `shift`
   - Remove the 1st element from the Array with `Array#shift`
 =end
 
-class CircularBuffer
-  def initialize(n)
-    @buffer = []
-    @max_size = n
-  end
+# class CircularBuffer
+#   def initialize(n)
+#     @buffer = []
+#     @max_size = n
+#   end
 
-  def put(x)
-    if @buffer.size >= @max_size
-      get
-      @buffer.push(x)
-    else
-      @buffer.push(x)
-    end
-  end
+#   def put(x)
+#     if @buffer.size >= @max_size
+#       get
+#       @buffer.push(x)
+#     else
+#       @buffer.push(x)
+#     end
+#   end
 
-  def get
-    @buffer.shift
-  end
-end
+#   def get
+#     @buffer.shift
+#   end
+# end
 
 buffer = CircularBuffer.new(3)
 puts buffer.get == nil      # [nil, nil, nil]       @start=0 | @end=0 get nil so NO CHANGE
