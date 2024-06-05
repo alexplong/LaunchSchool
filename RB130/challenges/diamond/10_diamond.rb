@@ -21,14 +21,14 @@ class Diamond
 
     def create_row(char, flank_space)
       case char
-      when 'A' then "#{' '*flank_space}A#{' '*flank_space}\n"
-      when 'B' then "#{' '*flank_space}B B#{' '*flank_space}\n"
-      else "#{' '*flank_space}#{char}#{' '*determine_middle_space(char)}#{char}#{' '*flank_space}\n"
+      when 'A' then "#{' ' * flank_space}A#{' ' * flank_space}\n"
+      when 'B' then "#{' ' * flank_space}B B#{' ' * flank_space}\n"
+      else "#{' ' * flank_space}#{char}#{' ' * determine_middle_space(char)}#{char}#{' ' * flank_space}\n"
       end
     end
 
     def determine_middle_space(char)
-      (-1 + 2*REF_ALPHABET.index(char))
+      (-1 + (2 * REF_ALPHABET.index(char)))
     end
   end
 end
