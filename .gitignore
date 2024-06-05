@@ -7,3 +7,9 @@ RB129/coderpad.rb
 RB130/test2/test1.rb
 RB130/test2/test2.rb
 .DS_Store
+RB139/film_library.rb
+RB139/film_library_test.rb
+RB139/parallax.rb
+RB139/parallax_test.rb
+RB139/.rubocop.yml
+RB130/.rubocop.yml
